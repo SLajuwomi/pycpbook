@@ -38,3 +38,4 @@ _generated_*.tex
 
 # Final output
 *.pdf
+content/_minted/
