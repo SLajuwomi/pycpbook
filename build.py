@@ -30,6 +30,7 @@ import argparse
 import glob
 import os
 import shutil
+import subprocess
 import sys
 
 
@@ -98,14 +99,69 @@ def run_pdf():
 
 def run_test():
     """
-    Placeholder function for the stress testing command.
-    Full implementation will be handled in a future step.
+    Discovers and runs all stress tests located in the 'stress-tests/' directory.
+
+    The script recursively scans for Python files, excluding the 'utilities/'
+    subdirectory. Each found test script is executed as a separate process.
+    If any test script exits with a non-zero status code, this function
+    will report the failure and terminate the build script, ensuring CI/CD
+    workflows correctly identify test failures.
     """
-    print("Stress test execution is not yet implemented.")
-    # The full logic will involve:
-    # 1. Scanning the 'stress-tests/' directory for test scripts.
-    # 2. Executing each script using 'subprocess'.
-    # 3. Reporting any failures.
+    print("Running all stress tests...")
+
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    tests_dir = os.path.join(root_dir, "stress-tests")
+    utilities_dir = os.path.join(tests_dir, "utilities")
+
+    test_files = []
+    # Find all Python files recursively in the stress-tests directory.
+    for file_path in glob.glob(os.path.join(tests_dir, "**", "*.py"), recursive=True):
+        # Exclude files in the utilities subdirectory.
+        # This check works by seeing if the utilities path is a parent of the file path.
+        if not file_path.startswith(utilities_dir):
+            test_files.append(file_path)
+
+    if not test_files:
+        print("No test files found to run.")
+        return
+
+    failed_tests = []
+    for test_file in test_files:
+        relative_path = os.path.relpath(test_file, root_dir)
+        print(f"--- Running test: {relative_path} ---")
+        try:
+            # Execute the test script using the same Python interpreter.
+            # 'check=True' will raise CalledProcessError on a non-zero exit code.
+            # 'capture_output=True' and 'text=True' capture stdout/stderr as strings.
+            result = subprocess.run(
+                [sys.executable, test_file],
+                check=True,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+            )
+            # Print test output only if it's not empty, to keep the log clean.
+            if result.stdout.strip():
+                print(result.stdout)
+            print(f"--- PASS: {relative_path} ---\n")
+        except subprocess.CalledProcessError as e:
+            # This block executes if the test script fails (e.g., an assertion fails).
+            print(f"--- FAIL: {relative_path} ---", file=sys.stderr)
+            print("\nSTDOUT:", file=sys.stderr)
+            print(e.stdout, file=sys.stderr)
+            print("\nSTDERR:", file=sys.stderr)
+            print(e.stderr, file=sys.stderr)
+            failed_tests.append(relative_path)
+            print("-" * 30, "\n", file=sys.stderr)
+
+    if failed_tests:
+        print(f"\nSummary: {len(failed_tests)} test(s) failed:", file=sys.stderr)
+        for test in failed_tests:
+            print(f"  - {test}", file=sys.stderr)
+        # Exit with a non-zero status code to signal failure to CI systems.
+        sys.exit(1)
+    else:
+        print(f"\nSummary: All {len(test_files)} tests passed successfully!")
 
 
 def main():
