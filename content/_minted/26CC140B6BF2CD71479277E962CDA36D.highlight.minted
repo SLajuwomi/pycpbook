@@ -1,0 +1,95 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{Author: PyCPBook Community}
+\PYG{l+s+sd}{Source: Various competitive programming resources}
+\PYG{l+s+sd}{Description: A standard template for Python in programming contests.}
+\PYG{l+s+sd}{It provides fast I/O, increased recursion limit, and common helper functions}
+\PYG{l+s+sd}{to accelerate development under time constraints.}
+
+\PYG{l+s+sd}{Fast I/O:}
+\PYG{l+s+sd}{Standard `input()` can be slow. This template redefines `input` to use}
+\PYG{l+s+sd}{`sys.stdin.readline()`, which is significantly faster for large inputs.}
+\PYG{l+s+sd}{Helper functions like `get\PYGZus{}int()` and `get\PYGZus{}ints()` are provided for convenience.}
+\PYG{l+s+sd}{For output, printing with `\PYGZbs{}n` is generally fast enough, but for a huge number}
+\PYG{l+s+sd}{of output operations, `sys.stdout.write()` can be used.}
+
+\PYG{l+s+sd}{Recursion Limit:}
+\PYG{l+s+sd}{Python\PYGZsq{}s default recursion limit (often 1000) is too low for problems}
+\PYG{l+s+sd}{involving deep recursion, such as tree/graph traversals on large datasets.}
+\PYG{l+s+sd}{`sys.setrecursionlimit(10**6)` increases this limit to avoid `RecursionError`.}
+
+\PYG{l+s+sd}{Usage:}
+\PYG{l+s+sd}{Place your problem\PYGZhy{}solving logic inside the `solve()` function. The main}
+\PYG{l+s+sd}{execution block is set up to call this function. If the problem has multiple}
+\PYG{l+s+sd}{test cases, you can uncomment the loop in the `if \PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{} == \PYGZdq{}\PYGZus{}\PYGZus{}main\PYGZus{}\PYGZus{}\PYGZdq{}` block.}
+\PYG{l+s+sd}{Time: N/A}
+\PYG{l+s+sd}{Space: N/A}
+\PYG{l+s+sd}{Status: Not applicable (Utility)}
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{sys}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{math}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{os}
+
+\PYG{c+c1}{\PYGZsh{} Set a higher recursion limit for deep recursive calls.}
+\PYG{n}{sys}\PYG{o}{.}\PYG{n}{setrecursionlimit}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{o}{*}\PYG{o}{*}\PYG{l+m+mi}{6}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Redefine input for faster I/O.}
+\PYG{n+nb}{input} \PYG{o}{=} \PYG{n}{sys}\PYG{o}{.}\PYG{n}{stdin}\PYG{o}{.}\PYG{n}{readline}
+
+
+\PYG{c+c1}{\PYGZsh{} Helper functions for concise input reading.}
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{get\PYGZus{}int}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}Reads a single integer from a line.\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{return} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{input}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}
+
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{get\PYGZus{}ints}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}Reads a list of space\PYGZhy{}separated integers from a line.\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{return} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n+nb}{map}\PYG{p}{(}\PYG{n+nb}{int}\PYG{p}{,} \PYG{n+nb}{input}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
+
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{get\PYGZus{}str}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}Reads a single string from a line, stripping trailing whitespace.\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{return} \PYG{n+nb}{input}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n}{strip}\PYG{p}{(}\PYG{p}{)}
+
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{get\PYGZus{}strs}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}Reads a list of space\PYGZhy{}separated strings from a line.\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{return} \PYG{n+nb}{input}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n}{strip}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{p}{)}
+
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{solve}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    This is the main function where the solution logic for a single}
+\PYG{l+s+sd}{    test case should be implemented.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{c+c1}{\PYGZsh{} \PYGZhy{}\PYGZhy{}\PYGZhy{} Your code here \PYGZhy{}\PYGZhy{}\PYGZhy{}}
+    \PYG{c+c1}{\PYGZsh{} As an example, this code reads two integers and prints their sum.}
+    \PYG{k}{try}\PYG{p}{:}
+        \PYG{n}{n}\PYG{p}{,} \PYG{n}{m} \PYG{o}{=} \PYG{n}{get\PYGZus{}ints}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{n} \PYG{o}{+} \PYG{n}{m}\PYG{p}{)}
+    \PYG{k}{except} \PYG{p}{(}\PYG{n+ne}{IOError}\PYG{p}{,} \PYG{n+ne}{ValueError}\PYG{p}{)}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} This handles cases where input is exhausted or invalid,}
+        \PYG{c+c1}{\PYGZsh{} which can happen in some online judges.}
+        \PYG{k}{pass}
+
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{main}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Main execution function.}
+\PYG{l+s+sd}{    Handles multiple test cases if required.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{c+c1}{\PYGZsh{} To handle multiple test cases, uncomment the following lines:}
+    \PYG{c+c1}{\PYGZsh{} t = get\PYGZus{}int()}
+    \PYG{c+c1}{\PYGZsh{} for \PYGZus{} in range(t):}
+    \PYG{c+c1}{\PYGZsh{}     solve()}
+
+    \PYG{c+c1}{\PYGZsh{} For a single test case:}
+    \PYG{n}{solve}\PYG{p}{(}\PYG{p}{)}
+
+
+\PYG{k}{if} \PYG{n+nv+vm}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZus{}\PYGZus{}main\PYGZus{}\PYGZus{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:}
+    \PYG{n}{main}\PYG{p}{(}\PYG{p}{)}
+
+\end{MintedVerbatim}
