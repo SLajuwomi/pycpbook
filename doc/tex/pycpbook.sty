@@ -1,3 +1,98 @@
-% This is the custom LaTeX style file for PyCPBook.
-% It will define custom commands, colors, and layout configurations.
-\ProvidesPackage{doc/tex/pycpbook}
+% Custom LaTeX style package for PyCPBook
+\ProvidesPackage{doc/tex/pycpbook}[2024/01/01 PyCPBook Style]
+
+% --- Package Dependencies ---
+% Ensure necessary packages are loaded.
+\RequirePackage{geometry}
+\RequirePackage{xcolor}
+\RequirePackage{titlesec}
+\RequirePackage{titling}
+\RequirePackage{fancyhdr}
+\RequirePackage{minted}
+\RequirePackage[framemethod=default]{mdframed}
+
+% --- Color Definitions ---
+% Defines a color palette for the document and code listings.
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+\definecolor{commentgreen}{rgb}{0,0.5,0}
+\definecolor{stringred}{rgb}{0.8,0,0}
+\definecolor{keywordblue}{rgb}{0,0,0.8}
+\definecolor{headingcolor}{gray}{0.3}
+
+% --- Page Layout Configuration ---
+% A4 paper, two columns, narrow margins for content density.
+\geometry{
+  a4paper,
+  twocolumn,
+  left=1.5cm,
+  right=1.5cm,
+  top=1.5cm,
+  bottom=2cm,
+  columnsep=0.8cm
+}
+
+% --- Minted (Code Listing) Configuration ---
+% Customizes the appearance of Python code blocks.
+\setminted{
+    fontfamily=tt,      % Use a typewriter font
+    fontsize=\small,    % Use a slightly smaller font for code
+    python3=true,       % Assume Python 3
+    style=default,      % Use a built-in style (can be customized further)
+    bgcolor=codegray,   % Set a light gray background color
+    linenos,            % Show line numbers
+    frame=lines,        % Put a thin frame around the code
+    framerule=0.4pt,    % Frame thickness
+    framesep=3pt,
+    breaklines,         % Automatically break long lines
+    tabsize=4
+}
+
+% Define a new environment for the docstring explanations.
+% This will be a simple framed box for visual separation.
+\newenvironment{docstring}{%
+    \begin{mdframed}[
+        backgroundcolor=gray!10,
+        linecolor=gray!40,
+        linewidth=1pt,
+        innertopmargin=10pt,
+        innerbottommargin=10pt,
+        innerrightmargin=10pt,
+        innerleftmargin=10pt,
+        skipabove=10pt,
+        skipbelow=10pt
+    ]
+}{\end{mdframed}}
+
+% --- Header and Footer Configuration ---
+\pagestyle{fancy}
+\fancyhf{} % Clear all header and footer fields
+\fancyhead[L]{\textit{Python Competitive Programming Notebook}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% --- Title and Section Formatting ---
+% Customize the appearance of the main title.
+\pretitle{\begin{center}\Huge\bfseries}
+\posttitle{\end{center}}
+\preauthor{\begin{center}\large}
+\postauthor{\end{center}}
+\predate{\begin{center}\large}
+\postdate{\end{center}}
+\setlength{\droptitle}{-4em} % Move title up
+
+% Customize chapter, section, and subsection headings for a compact look.
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{headingcolor}}
+  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{headingcolor}}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{headingcolor}}
+  {\thesubsection}{1em}{}
+
+% Adjust spacing for titles to be more compact
+\titlespacing*{\chapter}{0pt}{-20pt}{40pt}
+\titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+\titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}

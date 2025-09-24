@@ -1,2 +1,37 @@
-% This file will contain the LaTeX preamble, including package imports
-% and document-level settings. It will be included by the main .tex file.
+% Preamble for PyCPBook
+% This file includes all necessary LaTeX packages and global settings.
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% Core packages for document structure and appearance
+\usepackage{geometry}      % For page layout customization
+\usepackage{graphicx}      % For including images
+\usepackage{amsmath}       % For advanced math environments
+\usepackage{amssymb}       % For math symbols
+\usepackage{multicol}      % For multi-column layout
+\usepackage{fancyhdr}      % For custom headers and footers
+\usepackage{xcolor}        % For color definitions and usage
+\usepackage{hyperref}      % For PDF hyperlinks and metadata
+\usepackage{titlesec}      % For customizing section titles
+\usepackage{titling}       % For customizing the main title
+\usepackage{lmodern}       % For a modern-looking font
+\usepackage[framemethod=default]{mdframed} % For framed boxes around docstrings
+
+% Package for code listings. Minted provides superior highlighting using Pygments.
+% This requires the --shell-escape flag for pdflatex.
+\usepackage{minted}
+
+% --- Hyperref Configuration ---
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    pdftitle={Python Competitive Programming Notebook},
+    pdfauthor={PyCPBook Community},
+    pdfsubject={Competitive Programming},
+    pdfkeywords={python, algorithms, data structures},
+    bookmarks=true,
+    bookmarksopen=true
+}
