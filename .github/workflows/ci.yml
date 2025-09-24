@@ -1,2 +1,45 @@
-# This file will contain the GitHub Actions workflow for Continuous Integration.
-# It will be configured to run tests automatically.
+# .github/workflows/ci.yml
+
+# This is the name of the workflow, which will be displayed on the GitHub Actions tab.
+name: Python CI
+
+# This section defines the triggers for the workflow.
+# It will run on every push and pull request to the 'main' and 'master' branches.
+on:
+  push:
+    branches: ['main', 'master']
+  pull_request:
+    branches: ['main', 'master']
+
+# This section defines the jobs that will be executed as part of the workflow.
+# A job is a set of steps that execute on the same runner.
+jobs:
+  # The 'test' job is responsible for running the stress tests.
+  test:
+    # This specifies the type of runner the job will run on.
+    # 'ubuntu-latest' is a standard, general-purpose Linux environment.
+    runs-on: ubuntu-latest
+
+    # This defines the sequence of steps that make up the 'test' job.
+    steps:
+      # Step 1: Check out the repository's code
+      # This action allows the workflow to access the project's files.
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up the Python environment
+      # This action installs a specific version of Python on the runner.
+      # We specify Python 3.10, but this can be adjusted as needed.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # Step 3: Run the tests
+      # This step executes the main test command for the project.
+      # The 'build.py' script (to be implemented) will be responsible for
+      # discovering and running all stress tests. If any test fails,
+      # the script should exit with a non-zero status code, which will
+      # cause this step, and the entire workflow run, to fail.
+      - name: Run stress tests
+        run: python build.py test
