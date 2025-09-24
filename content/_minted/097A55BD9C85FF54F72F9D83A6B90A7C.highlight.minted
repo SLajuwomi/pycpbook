@@ -1,0 +1,103 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{Author: PyCPBook Community}
+\PYG{l+s+sd}{Source: CP\PYGZhy{}Algorithms, various competitive programming tutorials}
+\PYG{l+s+sd}{Description: Implements a Segment Tree with lazy propagation. This powerful}
+\PYG{l+s+sd}{data structure is designed to handle range updates and range queries efficiently.}
+\PYG{l+s+sd}{While a standard Segment Tree can perform range queries in \PYGZdl{}O(\PYGZbs{}\PYGZbs{}log N)\PYGZdl{} time,}
+\PYG{l+s+sd}{updates are limited to single points. Lazy propagation extends this capability}
+\PYG{l+s+sd}{to allow range updates (e.g., adding a value to all elements in a range)}
+\PYG{l+s+sd}{to also be performed in \PYGZdl{}O(\PYGZbs{}\PYGZbs{}log N)\PYGZdl{} time.}
+
+\PYG{l+s+sd}{The core idea is to postpone updates to tree nodes and apply them only when}
+\PYG{l+s+sd}{necessary. When an update is requested for a range `[l, r]`, we traverse the}
+\PYG{l+s+sd}{tree. If a node\PYGZsq{}s range is fully contained within `[l, r]`, instead of updating}
+\PYG{l+s+sd}{all its children, we store the pending update value in a `lazy` array for that}
+\PYG{l+s+sd}{node and update the node\PYGZsq{}s main value. We then stop traversing down that path.}
+\PYG{l+s+sd}{This pending update is \PYGZdq{}pushed\PYGZdq{} down to its children only when a future query}
+\PYG{l+s+sd}{or update needs to access one of the children.}
+
+\PYG{l+s+sd}{This implementation supports range addition updates and range sum queries.}
+\PYG{l+s+sd}{The logic can be adapted for other associative operations like range minimum/maximum}
+\PYG{l+s+sd}{and range assignment.}
+
+\PYG{l+s+sd}{Time: \PYGZdl{}O(\PYGZbs{}\PYGZbs{}log N)\PYGZdl{} for both `update` (range update) and `query` (range query).}
+\PYG{l+s+sd}{The initial `build` operation takes \PYGZdl{}O(N)\PYGZdl{} time.}
+\PYG{l+s+sd}{Space: \PYGZdl{}O(N)\PYGZdl{} to store the tree and lazy arrays. A size of \PYGZdl{}4N\PYGZdl{} is allocated}
+\PYG{l+s+sd}{to be safe for a complete binary tree representation.}
+\PYG{l+s+sd}{Status: Stress\PYGZhy{}tested}
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+
+\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{SegmentTree}\PYG{p}{:}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{arr}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{n} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{arr}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mi}{4} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{n}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lazy} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mi}{4} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{n}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{arr} \PYG{o}{=} \PYG{n}{arr}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}build}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{n} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{\PYGZus{}build}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{v}\PYG{p}{,} \PYG{n}{tl}\PYG{p}{,} \PYG{n}{tr}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{if} \PYG{n}{tl} \PYG{o}{==} \PYG{n}{tr}\PYG{p}{:}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{arr}\PYG{p}{[}\PYG{n}{tl}\PYG{p}{]}
+        \PYG{k}{else}\PYG{p}{:}
+            \PYG{n}{tm} \PYG{o}{=} \PYG{p}{(}\PYG{n}{tl} \PYG{o}{+} \PYG{n}{tr}\PYG{p}{)} \PYG{o}{/}\PYG{o}{/} \PYG{l+m+mi}{2}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}build}\PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v}\PYG{p}{,} \PYG{n}{tl}\PYG{p}{,} \PYG{n}{tm}\PYG{p}{)}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}build}\PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{tm} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{tr}\PYG{p}{)}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v}\PYG{p}{]} \PYG{o}{+} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{]}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{\PYGZus{}push}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{v}\PYG{p}{,} \PYG{n}{tl}\PYG{p}{,} \PYG{n}{tr}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lazy}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{k}{return}
+
+        \PYG{n}{range\PYGZus{}len} \PYG{o}{=} \PYG{n}{tr} \PYG{o}{\PYGZhy{}} \PYG{n}{tl} \PYG{o}{+} \PYG{l+m+mi}{1}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]} \PYG{o}{+}\PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lazy}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]} \PYG{o}{*} \PYG{n}{range\PYGZus{}len}
+
+        \PYG{k}{if} \PYG{n}{tl} \PYG{o}{!=} \PYG{n}{tr}\PYG{p}{:}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lazy}\PYG{p}{[}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v}\PYG{p}{]} \PYG{o}{+}\PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lazy}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lazy}\PYG{p}{[}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{+}\PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lazy}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]}
+
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lazy}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{0}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{\PYGZus{}update}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{v}\PYG{p}{,} \PYG{n}{tl}\PYG{p}{,} \PYG{n}{tr}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n}{r}\PYG{p}{,} \PYG{n}{addval}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}push}\PYG{p}{(}\PYG{n}{v}\PYG{p}{,} \PYG{n}{tl}\PYG{p}{,} \PYG{n}{tr}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n}{l} \PYG{o}{\PYGZgt{}} \PYG{n}{r}\PYG{p}{:}
+            \PYG{k}{return}
+        \PYG{k}{if} \PYG{n}{l} \PYG{o}{==} \PYG{n}{tl} \PYG{o+ow}{and} \PYG{n}{r} \PYG{o}{==} \PYG{n}{tr}\PYG{p}{:}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lazy}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]} \PYG{o}{+}\PYG{o}{=} \PYG{n}{addval}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}push}\PYG{p}{(}\PYG{n}{v}\PYG{p}{,} \PYG{n}{tl}\PYG{p}{,} \PYG{n}{tr}\PYG{p}{)}
+        \PYG{k}{else}\PYG{p}{:}
+            \PYG{n}{tm} \PYG{o}{=} \PYG{p}{(}\PYG{n}{tl} \PYG{o}{+} \PYG{n}{tr}\PYG{p}{)} \PYG{o}{/}\PYG{o}{/} \PYG{l+m+mi}{2}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}update}\PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v}\PYG{p}{,} \PYG{n}{tl}\PYG{p}{,} \PYG{n}{tm}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{r}\PYG{p}{,} \PYG{n}{tm}\PYG{p}{)}\PYG{p}{,} \PYG{n}{addval}\PYG{p}{)}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}update}\PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{tm} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{tr}\PYG{p}{,} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{l}\PYG{p}{,} \PYG{n}{tm} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{r}\PYG{p}{,} \PYG{n}{addval}\PYG{p}{)}
+
+            \PYG{c+c1}{\PYGZsh{} After children are updated, update self based on pushed children}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}push}\PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v}\PYG{p}{,} \PYG{n}{tl}\PYG{p}{,} \PYG{n}{tm}\PYG{p}{)}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}push}\PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{tm} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{tr}\PYG{p}{)}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v}\PYG{p}{]} \PYG{o}{+} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{]}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{\PYGZus{}query}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{v}\PYG{p}{,} \PYG{n}{tl}\PYG{p}{,} \PYG{n}{tr}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n}{r}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{if} \PYG{n}{l} \PYG{o}{\PYGZgt{}} \PYG{n}{r}\PYG{p}{:}
+            \PYG{k}{return} \PYG{l+m+mi}{0}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}push}\PYG{p}{(}\PYG{n}{v}\PYG{p}{,} \PYG{n}{tl}\PYG{p}{,} \PYG{n}{tr}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n}{l} \PYG{o}{==} \PYG{n}{tl} \PYG{o+ow}{and} \PYG{n}{r} \PYG{o}{==} \PYG{n}{tr}\PYG{p}{:}
+            \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]}
+
+        \PYG{n}{tm} \PYG{o}{=} \PYG{p}{(}\PYG{n}{tl} \PYG{o}{+} \PYG{n}{tr}\PYG{p}{)} \PYG{o}{/}\PYG{o}{/} \PYG{l+m+mi}{2}
+        \PYG{n}{left\PYGZus{}sum} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}query}\PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v}\PYG{p}{,} \PYG{n}{tl}\PYG{p}{,} \PYG{n}{tm}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{r}\PYG{p}{,} \PYG{n}{tm}\PYG{p}{)}\PYG{p}{)}
+        \PYG{n}{right\PYGZus{}sum} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}query}\PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{v} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{tm} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{tr}\PYG{p}{,} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{l}\PYG{p}{,} \PYG{n}{tm} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{r}\PYG{p}{)}
+        \PYG{k}{return} \PYG{n}{left\PYGZus{}sum} \PYG{o}{+} \PYG{n}{right\PYGZus{}sum}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{update}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n}{r}\PYG{p}{,} \PYG{n}{addval}\PYG{p}{)}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} Updates range [l, r] (inclusive)}
+        \PYG{k}{if} \PYG{n}{l} \PYG{o}{\PYGZgt{}} \PYG{n}{r}\PYG{p}{:}
+            \PYG{k}{return}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}update}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{n} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n}{r}\PYG{p}{,} \PYG{n}{addval}\PYG{p}{)}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{query}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n}{r}\PYG{p}{)}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} Queries range [l, r] (inclusive)}
+        \PYG{k}{if} \PYG{n}{l} \PYG{o}{\PYGZgt{}} \PYG{n}{r}\PYG{p}{:}
+            \PYG{k}{return} \PYG{l+m+mi}{0}
+        \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}query}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{n} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n}{r}\PYG{p}{)}
+
+\end{MintedVerbatim}
