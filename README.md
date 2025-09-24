@@ -40,7 +40,7 @@ The project is managed via the `build.py` script.
   python build.py test
   ```
 
-  This command will discover and execute all stress tests located in the `stress-tests/` directory to verify the correctness of the algorithms.
+  This command will discover and execute all stress tests located in the `stress_tests/` directory to verify the correctness of the algorithms.
 
 - **Clean build artifacts:**
   ```bash

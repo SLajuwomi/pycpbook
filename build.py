@@ -293,11 +293,11 @@ def run_pdf():
 
 def run_test():
     """
-    Discovers and runs all stress tests located in the 'stress-tests/' directory.
+    Discovers and runs all stress tests located in the 'stress_tests/' directory.
     """
     print("Running all stress tests...")
     root_dir = os.path.dirname(os.path.abspath(__file__))
-    tests_dir = os.path.join(root_dir, "stress-tests")
+    tests_dir = os.path.join(root_dir, "stress_tests")
     utilities_dir = os.path.join(tests_dir, "utilities")
 
     test_files = []
