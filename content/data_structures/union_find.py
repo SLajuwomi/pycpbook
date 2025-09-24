@@ -16,7 +16,7 @@ This implementation includes two key optimizations:
 
 The combination of these two techniques makes the amortized time complexity
 of both `find` and `union` operations nearly constant.
-Time: $O(\\alpha(N))$ on average for both find and union operations, where $\\alpha$
+Time: $O(\\alpha(N))$ on average for both find and union operations, where $alpha$
 is the extremely slow-growing inverse Ackermann function. For all practical
 purposes, this is considered constant time.
 Space: $O(N)$ to store the parent and size arrays for N elements.

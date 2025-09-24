@@ -1,0 +1,106 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{Author: PyCPBook Community}
+\PYG{l+s+sd}{Source: KACTL, TopCoder tutorials}
+\PYG{l+s+sd}{Description: Implements a 2D Fenwick Tree (Binary Indexed Tree). This data}
+\PYG{l+s+sd}{structure extends the 1D Fenwick Tree to support point updates and prefix}
+\PYG{l+s+sd}{rectangle sum queries on a 2D grid.}
+
+\PYG{l+s+sd}{The primary operations are:}
+\PYG{l+s+sd}{1.  add(r, c, delta): Adds `delta` to the element at grid cell (r, c).}
+\PYG{l+s+sd}{2.  query(r, c): Computes the sum of the rectangle from (0, 0) to (r\PYGZhy{}1, c\PYGZhy{}1).}
+
+\PYG{l+s+sd}{A 2D Fenwick Tree can be conceptualized as a Fenwick Tree where each element is}
+\PYG{l+s+sd}{itself another Fenwick Tree. The `add` and `query` operations therefore involve}
+\PYG{l+s+sd}{traversing the tree structure in both dimensions, resulting in a time complexity}
+\PYG{l+s+sd}{that is the product of the logarithmic complexities of each dimension.}
+
+\PYG{l+s+sd}{The `query\PYGZus{}range` method uses the principle of inclusion\PYGZhy{}exclusion on the prefix}
+\PYG{l+s+sd}{rectangle sums to calculate the sum of any arbitrary sub\PYGZhy{}rectangle. Given a}
+\PYG{l+s+sd}{rectangle defined by top\PYGZhy{}left (r1, c1) and bottom\PYGZhy{}right (r2\PYGZhy{}1, c2\PYGZhy{}1), the sum is:}
+\PYG{l+s+sd}{Sum(r2, c2) \PYGZhy{} Sum(r1, c2) \PYGZhy{} Sum(r2, c1) + Sum(r1, c1),}
+\PYG{l+s+sd}{where Sum(r, c) is the prefix sum from (0,0) to (r\PYGZhy{}1, c\PYGZhy{}1).}
+
+\PYG{l+s+sd}{Time: \PYGZdl{}O(\PYGZbs{}log R \PYGZbs{}cdot \PYGZbs{}log C)\PYGZdl{} for `add` and `query` on an \PYGZdl{}R \PYGZbs{}times C\PYGZdl{} grid.}
+\PYG{l+s+sd}{Space: \PYGZdl{}O(R \PYGZbs{}cdot C)\PYGZdl{} to store the 2D tree.}
+\PYG{l+s+sd}{Status: Stress\PYGZhy{}tested}
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+
+\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{FenwickTree2D}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    A class that implements a 2D Fenwick Tree using 0\PYGZhy{}based indexing.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{rows}\PYG{p}{,} \PYG{n}{cols}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Initializes the 2D Fenwick Tree for a grid of a given size.}
+\PYG{l+s+sd}{        All elements are initially zero.}
+
+\PYG{l+s+sd}{        Args:}
+\PYG{l+s+sd}{            rows (int): The number of rows in the grid.}
+\PYG{l+s+sd}{            cols (int): The number of columns in the grid.}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rows} \PYG{o}{=} \PYG{n}{rows}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cols} \PYG{o}{=} \PYG{n}{cols}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree} \PYG{o}{=} \PYG{p}{[}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{*} \PYG{n}{cols} \PYG{k}{for} \PYG{n}{\PYGZus{}} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{rows}\PYG{p}{)}\PYG{p}{]}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{add}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{r}\PYG{p}{,} \PYG{n}{c}\PYG{p}{,} \PYG{n}{delta}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Adds a delta value to the element at grid cell (r, c).}
+
+\PYG{l+s+sd}{        Args:}
+\PYG{l+s+sd}{            r (int): The 0\PYGZhy{}based row index of the element to update.}
+\PYG{l+s+sd}{            c (int): The 0\PYGZhy{}based column index of the element to update.}
+\PYG{l+s+sd}{            delta (int): The value to add.}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{n}{i} \PYG{o}{=} \PYG{n}{r}
+        \PYG{k}{while} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rows}\PYG{p}{:}
+            \PYG{n}{j} \PYG{o}{=} \PYG{n}{c}
+            \PYG{k}{while} \PYG{n}{j} \PYG{o}{\PYGZlt{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cols}\PYG{p}{:}
+                \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]} \PYG{o}{+}\PYG{o}{=} \PYG{n}{delta}
+                \PYG{n}{j} \PYG{o}{|}\PYG{o}{=} \PYG{n}{j} \PYG{o}{+} \PYG{l+m+mi}{1}
+            \PYG{n}{i} \PYG{o}{|}\PYG{o}{=} \PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{query}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{r}\PYG{p}{,} \PYG{n}{c}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Computes the prefix sum of the rectangle from (0, 0) to (r\PYGZhy{}1, c\PYGZhy{}1).}
+
+\PYG{l+s+sd}{        Args:}
+\PYG{l+s+sd}{            r (int): The 0\PYGZhy{}based exclusive row bound of the query rectangle.}
+\PYG{l+s+sd}{            c (int): The 0\PYGZhy{}based exclusive column bound of the query rectangle.}
+
+\PYG{l+s+sd}{        Returns:}
+\PYG{l+s+sd}{            int: The sum of the elements in the rectangle [0..r\PYGZhy{}1, 0..c\PYGZhy{}1].}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{n}{total\PYGZus{}sum} \PYG{o}{=} \PYG{l+m+mi}{0}
+        \PYG{n}{i} \PYG{o}{=} \PYG{n}{r} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}
+        \PYG{k}{while} \PYG{n}{i} \PYG{o}{\PYGZgt{}}\PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{n}{j} \PYG{o}{=} \PYG{n}{c} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}
+            \PYG{k}{while} \PYG{n}{j} \PYG{o}{\PYGZgt{}}\PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{:}
+                \PYG{n}{total\PYGZus{}sum} \PYG{o}{+}\PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]}
+                \PYG{n}{j} \PYG{o}{=} \PYG{p}{(}\PYG{n}{j} \PYG{o}{\PYGZam{}} \PYG{p}{(}\PYG{n}{j} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}
+            \PYG{n}{i} \PYG{o}{=} \PYG{p}{(}\PYG{n}{i} \PYG{o}{\PYGZam{}} \PYG{p}{(}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}
+        \PYG{k}{return} \PYG{n}{total\PYGZus{}sum}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{query\PYGZus{}range}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{r1}\PYG{p}{,} \PYG{n}{c1}\PYG{p}{,} \PYG{n}{r2}\PYG{p}{,} \PYG{n}{c2}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Computes the sum of the rectangle from (r1, c1) to (r2\PYGZhy{}1, c2\PYGZhy{}1).}
+
+\PYG{l+s+sd}{        Args:}
+\PYG{l+s+sd}{            r1, c1 (int): The 0\PYGZhy{}based inclusive top\PYGZhy{}left coordinates.}
+\PYG{l+s+sd}{            r2, c2 (int): The 0\PYGZhy{}based exclusive bottom\PYGZhy{}right coordinates.}
+
+\PYG{l+s+sd}{        Returns:}
+\PYG{l+s+sd}{            int: The sum of elements in the specified rectangular range.}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{k}{if} \PYG{n}{r1} \PYG{o}{\PYGZgt{}}\PYG{o}{=} \PYG{n}{r2} \PYG{o+ow}{or} \PYG{n}{c1} \PYG{o}{\PYGZgt{}}\PYG{o}{=} \PYG{n}{c2}\PYG{p}{:}
+            \PYG{k}{return} \PYG{l+m+mi}{0}
+
+        \PYG{n}{total} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{query}\PYG{p}{(}\PYG{n}{r2}\PYG{p}{,} \PYG{n}{c2}\PYG{p}{)}
+        \PYG{n}{total} \PYG{o}{\PYGZhy{}}\PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{query}\PYG{p}{(}\PYG{n}{r1}\PYG{p}{,} \PYG{n}{c2}\PYG{p}{)}
+        \PYG{n}{total} \PYG{o}{\PYGZhy{}}\PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{query}\PYG{p}{(}\PYG{n}{r2}\PYG{p}{,} \PYG{n}{c1}\PYG{p}{)}
+        \PYG{n}{total} \PYG{o}{+}\PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{query}\PYG{p}{(}\PYG{n}{r1}\PYG{p}{,} \PYG{n}{c1}\PYG{p}{)}
+        \PYG{k}{return} \PYG{n}{total}
+
+\end{MintedVerbatim}

@@ -19,7 +19,7 @@ convention in Python. The internal logic is adapted to work with this indexing.
 - To find the next index to update in `add`, we use `idx |= idx + 1`.
 - To find the next index to sum in `query`, we use `idx = (idx & (idx + 1)) - 1`.
 
-Time: $O(\log N)$ for both `add` (point update) and `query` (prefix sum).
+Time: \$O(\log N)$ for both `add` (point update) and `query` (prefix sum).
 Space: $O(N)$ to store the tree array.
 Status: Stress-tested
 """
@@ -65,7 +65,6 @@ class FenwickTree:
         Returns:
             int: The sum of elements in the prefix `[0, right-1]`.
         """
-
         idx = right - 1
         total_sum = 0
         while idx >= 0:

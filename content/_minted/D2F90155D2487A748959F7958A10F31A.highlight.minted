@@ -17,7 +17,7 @@
 
 \PYG{l+s+sd}{The combination of these two techniques makes the amortized time complexity}
 \PYG{l+s+sd}{of both `find` and `union` operations nearly constant.}
-\PYG{l+s+sd}{Time: \PYGZdl{}O(\PYGZbs{}\PYGZbs{}alpha(N))\PYGZdl{} on average for both find and union operations, where \PYGZdl{}\PYGZbs{}\PYGZbs{}alpha\PYGZdl{}}
+\PYG{l+s+sd}{Time: \PYGZdl{}O(\PYGZbs{}\PYGZbs{}alpha(N))\PYGZdl{} on average for both find and union operations, where \PYGZdl{}alpha\PYGZdl{}}
 \PYG{l+s+sd}{is the extremely slow\PYGZhy{}growing inverse Ackermann function. For all practical}
 \PYG{l+s+sd}{purposes, this is considered constant time.}
 \PYG{l+s+sd}{Space: \PYGZdl{}O(N)\PYGZdl{} to store the parent and size arrays for N elements.}
@@ -52,7 +52,6 @@
 \PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
         \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{parent}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{==} \PYG{n}{i}\PYG{p}{:}
             \PYG{k}{return} \PYG{n}{i}
-        \PYG{c+c1}{\PYGZsh{} Path compression: set the parent directly to the root.}
         \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{parent}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{find}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{parent}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{p}{)}
         \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{parent}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
 
