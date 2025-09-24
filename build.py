@@ -23,15 +23,45 @@ following commands:
 
 @dependencies
 - Python 3.8+
-- A TeX distribution (for the 'pdf' command, to be fully implemented later).
+- A TeX distribution (e.g., TeX Live, MiKTeX) with 'pdflatex' in the system PATH.
 """
 
 import argparse
+import ast
 import glob
 import os
 import shutil
 import subprocess
 import sys
+
+
+def _escape_latex(text):
+    """
+    Escapes characters with special meaning in LaTeX.
+
+    This function ensures that plain text (like docstrings) can be safely
+    included in a .tex file without causing compilation errors.
+
+    Args:
+        text (str): The input string to be escaped.
+
+    Returns:
+        str: The string with LaTeX special characters escaped.
+    """
+    if text is None:
+        return ""
+    return (
+        text.replace("\\", r"\textbackslash{}")
+        .replace("{", r"\{")
+        .replace("}", r"\}")
+        .replace("#", r"\#")
+        .replace("$", r"\$")
+        .replace("%", r"\%")
+        .replace("&", r"\&")
+        .replace("_", r"\_")
+        .replace("^", r"\textasciicircum{}")
+        .replace("~", r"\textasciitilde{}")
+    )
 
 
 def run_clean():
@@ -48,7 +78,7 @@ def run_clean():
         "*.log",
         "*.out",
         "*.toc",
-        "*.pdf",
+        "pycpbook.pdf",  # Target the specific PDF name
         "*.fls",
         "*.fdb_latexmk",
         "_generated_*.tex",
@@ -57,8 +87,8 @@ def run_clean():
     root_dir = os.path.dirname(os.path.abspath(__file__))
     files_removed_count = 0
 
+    # Clean from the root directory
     for pattern in patterns:
-        # Search for files matching the pattern in the project's root directory.
         for file_path in glob.glob(os.path.join(root_dir, pattern)):
             try:
                 os.remove(file_path)
@@ -67,9 +97,20 @@ def run_clean():
             except OSError as e:
                 print(f"Error removing file {file_path}: {e}", file=sys.stderr)
 
+    # Clean from the content directory as pdflatex runs there
+    content_dir = os.path.join(root_dir, "content")
+    for pattern in patterns:
+        for file_path in glob.glob(os.path.join(content_dir, pattern)):
+            try:
+                os.remove(file_path)
+                print(f"Removed: {os.path.basename(file_path)}")
+                files_removed_count += 1
+            except OSError as e:
+                print(f"Error removing file {file_path}: {e}", file=sys.stderr)
+
     # The 'minted' package creates a _minted* directory for cached code highlighting.
-    # This should also be removed.
-    minted_dirs = glob.glob(os.path.join(root_dir, "_minted*"))
+    # This should also be removed. It can be created in root or content.
+    minted_dirs = glob.glob(os.path.join(root_dir, "**/_minted*", recursive=True))
     for minted_dir in minted_dirs:
         if os.path.isdir(minted_dir):
             try:
@@ -86,15 +127,152 @@ def run_clean():
 
 def run_pdf():
     """
-    Placeholder function for the PDF generation command.
-    Full implementation will be handled in a future step.
+    Generates the PyCPBook PDF.
+
+    This function scans the 'content/' directory, parses each Python file to
+    extract its docstring (explanation) and code, generates intermediate LaTeX
+    files, and then compiles the main 'pycpbook.tex' file into a PDF.
     """
-    print("PDF generation is not yet implemented.")
-    # The full logic will involve:
-    # 1. Scanning the 'content/' directory.
-    # 2. Parsing Python files to extract docstrings and code.
-    # 3. Generating intermediate .tex files.
-    # 4. Calling 'pdflatex' to compile the final PDF.
+    print("Starting PDF generation...")
+
+    # 1. Verify pdflatex dependency is met
+    if not shutil.which("pdflatex"):
+        print(
+            "Error: 'pdflatex' command not found.",
+            "Please install a TeX distribution (like TeX Live, MiKTeX, or MacTeX)",
+            "and ensure it is in your system's PATH.",
+            sep="\n",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    content_dir = os.path.join(root_dir, "content")
+
+    # 2. Scan content directories (chapters)
+    chapters = sorted(
+        [
+            d
+            for d in os.listdir(content_dir)
+            if os.path.isdir(os.path.join(content_dir, d))
+        ]
+    )
+
+    for chapter in chapters:
+        chapter_path = os.path.join(content_dir, chapter)
+        py_files = sorted(glob.glob(os.path.join(chapter_path, "*.py")))
+        generated_tex_files = []
+
+        if not py_files:
+            continue
+
+        print(f"Processing chapter: {chapter}")
+
+        # 3. Process each Python file in the chapter
+        for py_file_path in py_files:
+            filename = os.path.basename(py_file_path)
+            base_filename = os.path.splitext(filename)[0]
+            generated_tex_path = os.path.join(
+                chapter_path, f"_generated_{base_filename}.tex"
+            )
+            generated_tex_files.append(os.path.basename(generated_tex_path))
+
+            print(f"  - Parsing {filename}...")
+            with open(py_file_path, "r", encoding="utf-8") as f:
+                source_code = f.read()
+
+            # Use AST to safely parse the file
+            try:
+                tree = ast.parse(source_code)
+                docstring = ast.get_docstring(tree)
+            except SyntaxError as e:
+                print(
+                    f"Warning: Could not parse {filename}. Skipping. Error: {e}",
+                    file=sys.stderr,
+                )
+                continue
+
+            if not docstring:
+                print(f"Warning: No docstring found in {filename}.", file=sys.stderr)
+
+            # 4. Generate the intermediate .tex file
+            with open(generated_tex_path, "w", encoding="utf-8") as tex_file:
+                # Add a section title from the filename
+                section_title = base_filename.replace("_", " ").title()
+                tex_file.write(f"\\subsection*{{{section_title}}}\n\n")
+
+                # Write the docstring inside its custom environment
+                if docstring:
+                    escaped_docstring = _escape_latex(docstring)
+                    tex_file.write("\\begin{docstring}\n")
+                    tex_file.write(escaped_docstring)
+                    tex_file.write("\n\\end{docstring}\n\n")
+
+                # Write the source code inside a minted block
+                tex_file.write("\\begin{minted}{python}\n")
+                tex_file.write(source_code)
+                tex_file.write("\n\\end{minted}\n")
+
+        # 5. Update the chapter's main .tex file to include generated files
+        chapter_tex_path = os.path.join(chapter_path, "chapter.tex")
+        with open(chapter_tex_path, "w", encoding="utf-8") as f:
+            f.write("% This file is automatically generated by build.py.\n")
+            f.write("% Do not edit manually.\n\n")
+            for generated_file in generated_tex_files:
+                f.write(f"\\input{{{os.path.join(chapter, generated_file)}}}\n")
+
+    # 6. Compile the PDF using pdflatex
+    print("\nCompiling LaTeX document...")
+    main_tex_file = "pycpbook.tex"
+    # The minted package requires '--shell-escape' to be enabled.
+    # '-interaction=nonstopmode' prevents the compiler from stopping on errors.
+    pdflatex_command = [
+        "pdflatex",
+        "--shell-escape",
+        "-interaction=nonstopmode",
+        main_tex_file,
+    ]
+
+    for i in range(2):  # Run twice for ToC and references
+        print(f"--- Pass {i + 1} ---")
+        try:
+            # We run the command from within the 'content' directory so that
+            # LaTeX can find the input files easily.
+            result = subprocess.run(
+                pdflatex_command,
+                cwd=content_dir,
+                capture_output=True,
+                text=True,
+                check=True,
+                encoding="utf-8",
+            )
+            if "error" in result.stdout.lower():
+                print(f"LaTeX compilation might have issues. Check {main_tex_file}.log")
+
+        except (subprocess.CalledProcessError, FileNotFoundError) as e:
+            print("\n--- LaTeX Compilation Failed ---", file=sys.stderr)
+            log_file = os.path.join(content_dir, "pycpbook.log")
+            print(
+                f"Error during PDF compilation. See '{log_file}' for details.",
+                file=sys.stderr,
+            )
+            if os.path.exists(log_file):
+                with open(log_file, "r", encoding="utf-8") as f:
+                    # Print the last 20 lines of the log for quick diagnosis
+                    log_lines = f.readlines()
+                    print("\n--- Last 20 lines of log file ---\n", file=sys.stderr)
+                    sys.stderr.writelines(log_lines[-20:])
+            sys.exit(1)
+
+    # 7. Move the final PDF to the project root
+    final_pdf_path_src = os.path.join(content_dir, "pycpbook.pdf")
+    final_pdf_path_dest = os.path.join(root_dir, "pycpbook.pdf")
+    if os.path.exists(final_pdf_path_src):
+        shutil.move(final_pdf_path_src, final_pdf_path_dest)
+        print(f"\nPDF generated successfully: {final_pdf_path_dest}")
+    else:
+        print("Error: Final PDF was not found after compilation.", file=sys.stderr)
+        sys.exit(1)
 
 
 def run_test():
