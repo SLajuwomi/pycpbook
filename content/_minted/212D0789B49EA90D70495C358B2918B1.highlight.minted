@@ -21,8 +21,8 @@
 \PYG{l+s+sd}{Sum(r2, c2) \PYGZhy{} Sum(r1, c2) \PYGZhy{} Sum(r2, c1) + Sum(r1, c1),}
 \PYG{l+s+sd}{where Sum(r, c) is the prefix sum from (0,0) to (r\PYGZhy{}1, c\PYGZhy{}1).}
 
-\PYG{l+s+sd}{Time: \PYGZdl{}O(\PYGZbs{}log R \PYGZbs{}cdot \PYGZbs{}log C)\PYGZdl{} for `add` and `query` on an \PYGZdl{}R \PYGZbs{}times C\PYGZdl{} grid.}
-\PYG{l+s+sd}{Space: \PYGZdl{}O(R \PYGZbs{}cdot C)\PYGZdl{} to store the 2D tree.}
+\PYG{l+s+sd}{Time: \PYGZdl{}O(\PYGZbs{}\PYGZbs{}log R \PYGZbs{}\PYGZbs{}cdot \PYGZbs{}\PYGZbs{}log C)\PYGZdl{} for `add` and `query` on an \PYGZdl{}R \PYGZbs{}\PYGZbs{}times C\PYGZdl{} grid.}
+\PYG{l+s+sd}{Space: \PYGZdl{}O(R \PYGZbs{}\PYGZbs{}cdot C)\PYGZdl{} to store the 2D tree.}
 \PYG{l+s+sd}{Status: Stress\PYGZhy{}tested}
 \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
 

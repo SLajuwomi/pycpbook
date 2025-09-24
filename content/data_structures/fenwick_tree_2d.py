@@ -20,8 +20,8 @@ rectangle defined by top-left (r1, c1) and bottom-right (r2-1, c2-1), the sum is
 Sum(r2, c2) - Sum(r1, c2) - Sum(r2, c1) + Sum(r1, c1),
 where Sum(r, c) is the prefix sum from (0,0) to (r-1, c-1).
 
-Time: $O(\log R \cdot \log C)$ for `add` and `query` on an $R \times C$ grid.
-Space: $O(R \cdot C)$ to store the 2D tree.
+Time: $O(\\log R \\cdot \\log C)$ for `add` and `query` on an $R \\times C$ grid.
+Space: $O(R \\cdot C)$ to store the 2D tree.
 Status: Stress-tested
 """
 

@@ -20,7 +20,7 @@
 \PYG{l+s+sd}{\PYGZhy{} To find the next index to update in `add`, we use `idx |= idx + 1`.}
 \PYG{l+s+sd}{\PYGZhy{} To find the next index to sum in `query`, we use `idx = (idx \PYGZam{} (idx + 1)) \PYGZhy{} 1`.}
 
-\PYG{l+s+sd}{Time: \PYGZdl{}O(log N)\PYGZdl{} for both `add` (point update) and `query` (prefix sum).}
+\PYG{l+s+sd}{Time: \PYGZdl{}O(\PYGZbs{}\PYGZbs{}log N)\PYGZdl{} for both `add` (point update) and `query` (prefix sum).}
 \PYG{l+s+sd}{Space: \PYGZdl{}O(N)\PYGZdl{} to store the tree array.}
 \PYG{l+s+sd}{Status: Stress\PYGZhy{}tested}
 \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}

@@ -30,28 +30,21 @@ import argparse
 import ast
 import glob
 import os
+import re
 import shutil
 import subprocess
 import sys
 
 
-def _escape_latex(text):
+def _escape_latex_text_only(text):
     """
-    Escapes characters with special meaning in LaTeX.
-
-    This function ensures that plain text (like docstrings) can be safely
-    included in a .tex file without causing compilation errors.
-
-    Args:
-        text (str): The input string to be escaped.
-
-    Returns:
-        str: The string with LaTeX special characters escaped.
+    Escapes characters with special meaning in LaTeX for plain text.
+    This function should NOT be used on strings containing LaTeX commands.
     """
     if text is None:
         return ""
     return (
-        text.replace("\\", r"\textbackslash{}")
+        text.replace("\\", r"\textbackslash ")
         .replace("{", r"\{")
         .replace("}", r"\}")
         .replace("#", r"\#")
@@ -64,6 +57,51 @@ def _escape_latex(text):
     )
 
 
+def _escape_latex(text):
+    """
+    Escapes a string for LaTeX, preserving math mode ($...$) and inline code (`...`).
+
+    It parses the string in layers:
+    1. It splits the text by math delimiters ($...$), leaving them untouched.
+    2. For non-math segments, it then splits by inline code delimiters (`...`).
+    3. The content of inline code is escaped and wrapped in \\texttt{}.
+    4. Any remaining plain text is fully escaped.
+
+    Args:
+        text (str): The input string, possibly containing mixed content.
+
+    Returns:
+        str: The processed string, safe for LaTeX inclusion.
+    """
+    if text is None:
+        return ""
+
+    # Layer 1: Split by math blocks ($...$)
+    parts = re.split(r"(\$.*?\$)", text)
+    final_parts = []
+
+    for i, part in enumerate(parts):
+        # Even-indexed parts are non-math text; odd-indexed are math blocks.
+        if i % 2 == 1:
+            final_parts.append(part)  # Keep math blocks as is
+            continue
+
+        # Layer 2: For non-math text, split by inline code blocks (`...`)
+        sub_parts = re.split(r"(`.*?`)", part)
+        for j, sub_part in enumerate(sub_parts):
+            # Even-indexed are plain text; odd-indexed are code blocks.
+            if j % 2 == 1:
+                # For code blocks, strip backticks, escape content, and wrap in \texttt{}
+                code_content = sub_part[1:-1]
+                escaped_code = _escape_latex_text_only(code_content)
+                final_parts.append(f"\\texttt{{{escaped_code}}}")
+            else:
+                # For plain text, escape it normally
+                final_parts.append(_escape_latex_text_only(sub_part))
+
+    return "".join(final_parts)
+
+
 def run_clean():
     """
     Finds and removes all temporary files created during the PDF build process,
@@ -71,14 +109,12 @@ def run_clean():
     """
     print("Cleaning build artifacts...")
 
-    # Patterns for files to be removed, covering common LaTeX temporary files,
-    # generated TeX files, and the final PDF output.
     patterns = [
         "*.aux",
         "*.log",
         "*.out",
         "*.toc",
-        "pycpbook.pdf",  # Target the specific PDF name
+        "pycpbook.pdf",
         "*.fls",
         "*.fdb_latexmk",
         "_generated_*.tex",
@@ -87,7 +123,6 @@ def run_clean():
     root_dir = os.path.dirname(os.path.abspath(__file__))
     files_removed_count = 0
 
-    # Clean from the root directory
     for pattern in patterns:
         for file_path in glob.glob(os.path.join(root_dir, pattern)):
             try:
@@ -97,7 +132,6 @@ def run_clean():
             except OSError as e:
                 print(f"Error removing file {file_path}: {e}", file=sys.stderr)
 
-    # Clean from the content directory as pdflatex runs there
     content_dir = os.path.join(root_dir, "content")
     for pattern in patterns:
         for file_path in glob.glob(os.path.join(content_dir, pattern)):
@@ -108,8 +142,6 @@ def run_clean():
             except OSError as e:
                 print(f"Error removing file {file_path}: {e}", file=sys.stderr)
 
-    # The 'minted' package creates a _minted* directory for cached code highlighting.
-    # This should also be removed. It can be created in root or content.
     minted_dirs = glob.glob(os.path.join(root_dir, "**/_minted*", recursive=True))
     for minted_dir in minted_dirs:
         if os.path.isdir(minted_dir):
@@ -135,7 +167,6 @@ def run_pdf():
     """
     print("Starting PDF generation...")
 
-    # 1. Verify pdflatex dependency is met
     if not shutil.which("pdflatex"):
         print(
             "Error: 'pdflatex' command not found.",
@@ -149,7 +180,6 @@ def run_pdf():
     root_dir = os.path.dirname(os.path.abspath(__file__))
     content_dir = os.path.join(root_dir, "content")
 
-    # 2. Scan content directories (chapters)
     chapters = sorted(
         [
             d
@@ -168,7 +198,6 @@ def run_pdf():
 
         print(f"Processing chapter: {chapter}")
 
-        # 3. Process each Python file in the chapter
         for py_file_path in py_files:
             filename = os.path.basename(py_file_path)
             base_filename = os.path.splitext(filename)[0]
@@ -181,7 +210,6 @@ def run_pdf():
             with open(py_file_path, "r", encoding="utf-8") as f:
                 source_code = f.read()
 
-            # Use AST to safely parse the file
             try:
                 tree = ast.parse(source_code)
                 docstring = ast.get_docstring(tree)
@@ -195,25 +223,20 @@ def run_pdf():
             if not docstring:
                 print(f"Warning: No docstring found in {filename}.", file=sys.stderr)
 
-            # 4. Generate the intermediate .tex file
             with open(generated_tex_path, "w", encoding="utf-8") as tex_file:
-                # Add a section title from the filename
                 section_title = base_filename.replace("_", " ").title()
                 tex_file.write(f"\\subsection*{{{section_title}}}\n\n")
 
-                # Write the docstring inside its custom environment
                 if docstring:
                     escaped_docstring = _escape_latex(docstring)
                     tex_file.write("\\begin{docstring}\n")
                     tex_file.write(escaped_docstring)
                     tex_file.write("\n\\end{docstring}\n\n")
 
-                # Write the source code inside a minted block
                 tex_file.write("\\begin{minted}{python}\n")
                 tex_file.write(source_code)
                 tex_file.write("\n\\end{minted}\n")
 
-        # 5. Update the chapter's main .tex file to include generated files
         chapter_tex_path = os.path.join(chapter_path, "chapter.tex")
         with open(chapter_tex_path, "w", encoding="utf-8") as f:
             f.write("% This file is automatically generated by build.py.\n")
@@ -221,11 +244,8 @@ def run_pdf():
             for generated_file in generated_tex_files:
                 f.write(f"\\input{{{os.path.join(chapter, generated_file)}}}\n")
 
-    # 6. Compile the PDF using pdflatex
     print("\nCompiling LaTeX document...")
     main_tex_file = "pycpbook.tex"
-    # The minted package requires '--shell-escape' to be enabled.
-    # '-interaction=nonstopmode' prevents the compiler from stopping on errors.
     pdflatex_command = [
         "pdflatex",
         "--shell-escape",
@@ -233,11 +253,9 @@ def run_pdf():
         main_tex_file,
     ]
 
-    for i in range(2):  # Run twice for ToC and references
+    for i in range(2):
         print(f"--- Pass {i + 1} ---")
         try:
-            # We run the command from within the 'content' directory so that
-            # LaTeX can find the input files easily.
             result = subprocess.run(
                 pdflatex_command,
                 cwd=content_dir,
@@ -258,13 +276,11 @@ def run_pdf():
             )
             if os.path.exists(log_file):
                 with open(log_file, "r", encoding="utf-8") as f:
-                    # Print the last 20 lines of the log for quick diagnosis
                     log_lines = f.readlines()
                     print("\n--- Last 20 lines of log file ---\n", file=sys.stderr)
                     sys.stderr.writelines(log_lines[-20:])
             sys.exit(1)
 
-    # 7. Move the final PDF to the project root
     final_pdf_path_src = os.path.join(content_dir, "pycpbook.pdf")
     final_pdf_path_dest = os.path.join(root_dir, "pycpbook.pdf")
     if os.path.exists(final_pdf_path_src):
@@ -278,24 +294,14 @@ def run_pdf():
 def run_test():
     """
     Discovers and runs all stress tests located in the 'stress-tests/' directory.
-
-    The script recursively scans for Python files, excluding the 'utilities/'
-    subdirectory. Each found test script is executed as a separate process.
-    If any test script exits with a non-zero status code, this function
-    will report the failure and terminate the build script, ensuring CI/CD
-    workflows correctly identify test failures.
     """
     print("Running all stress tests...")
-
     root_dir = os.path.dirname(os.path.abspath(__file__))
     tests_dir = os.path.join(root_dir, "stress-tests")
     utilities_dir = os.path.join(tests_dir, "utilities")
 
     test_files = []
-    # Find all Python files recursively in the stress-tests directory.
     for file_path in glob.glob(os.path.join(tests_dir, "**", "*.py"), recursive=True):
-        # Exclude files in the utilities subdirectory.
-        # This check works by seeing if the utilities path is a parent of the file path.
         if not file_path.startswith(utilities_dir):
             test_files.append(file_path)
 
@@ -308,9 +314,6 @@ def run_test():
         relative_path = os.path.relpath(test_file, root_dir)
         print(f"--- Running test: {relative_path} ---")
         try:
-            # Execute the test script using the same Python interpreter.
-            # 'check=True' will raise CalledProcessError on a non-zero exit code.
-            # 'capture_output=True' and 'text=True' capture stdout/stderr as strings.
             result = subprocess.run(
                 [sys.executable, test_file],
                 check=True,
@@ -318,12 +321,10 @@ def run_test():
                 text=True,
                 encoding="utf-8",
             )
-            # Print test output only if it's not empty, to keep the log clean.
             if result.stdout.strip():
                 print(result.stdout)
             print(f"--- PASS: {relative_path} ---\n")
         except subprocess.CalledProcessError as e:
-            # This block executes if the test script fails (e.g., an assertion fails).
             print(f"--- FAIL: {relative_path} ---", file=sys.stderr)
             print("\nSTDOUT:", file=sys.stderr)
             print(e.stdout, file=sys.stderr)
@@ -336,7 +337,6 @@ def run_test():
         print(f"\nSummary: {len(failed_tests)} test(s) failed:", file=sys.stderr)
         for test in failed_tests:
             print(f"  - {test}", file=sys.stderr)
-        # Exit with a non-zero status code to signal failure to CI systems.
         sys.exit(1)
     else:
         print(f"\nSummary: All {len(test_files)} tests passed successfully!")
@@ -344,38 +344,31 @@ def run_test():
 
 def main():
     """
-    The main entry point for the script.
-    It sets up the command-line argument parser and executes the function
-    associated with the chosen command.
+    Main entry point for the script.
     """
     parser = argparse.ArgumentParser(
         description="Build and utility script for the Python Competitive Programming Notebook (PyCPBook)."
     )
-    # Using subparsers to create distinct commands like 'git push', 'git pull'.
     subparsers = parser.add_subparsers(
         dest="command", required=True, help="Available commands"
     )
 
-    # Subparser for the 'pdf' command.
     pdf_parser = subparsers.add_parser(
         "pdf", help="Parse content and generate the PDF notebook."
     )
     pdf_parser.set_defaults(func=run_pdf)
 
-    # Subparser for the 'test' command.
     test_parser = subparsers.add_parser(
         "test", help="Discover and run all stress tests."
     )
     test_parser.set_defaults(func=run_test)
 
-    # Subparser for the 'clean' command.
     clean_parser = subparsers.add_parser(
         "clean", help="Clean up all build artifacts and temporary files."
     )
     clean_parser.set_defaults(func=run_clean)
 
     args = parser.parse_args()
-    # Execute the function that was associated with the chosen subparser.
     args.func()
 
 
