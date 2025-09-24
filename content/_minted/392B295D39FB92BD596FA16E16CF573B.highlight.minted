@@ -1,0 +1,92 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{Author: PyCPBook Community}
+\PYG{l+s+sd}{Source: Based on common implementations in competitive programming resources}
+\PYG{l+s+sd}{Description: Implements a 1D Fenwick Tree, also known as a Binary Indexed Tree (BIT).}
+\PYG{l+s+sd}{This data structure is used to efficiently calculate prefix sums (or any other}
+\PYG{l+s+sd}{associative and invertible operation) on an array while supporting point updates.}
+
+\PYG{l+s+sd}{A Fenwick Tree of size N allows for two main operations, both in logarithmic time:}
+\PYG{l+s+sd}{1.  add(idx, delta): Adds `delta` to the element at index `idx`.}
+\PYG{l+s+sd}{2.  query(right): Computes the sum of the elements in the range [0, right).}
+
+\PYG{l+s+sd}{The core idea is that any integer can be represented as a sum of powers of two.}
+\PYG{l+s+sd}{Similarly, a prefix sum can be represented as a sum of sums over certain}
+\PYG{l+s+sd}{sub\PYGZhy{}ranges, where the size of these sub\PYGZhy{}ranges are powers of two. The tree}
+\PYG{l+s+sd}{stores these precomputed sub\PYGZhy{}range sums.}
+
+\PYG{l+s+sd}{This implementation is 0\PYGZhy{}indexed for user\PYGZhy{}facing operations, which is a common}
+\PYG{l+s+sd}{convention in Python. The internal logic is adapted to work with this indexing.}
+\PYG{l+s+sd}{\PYGZhy{} To find the next index to update in `add`, we use `idx |= idx + 1`.}
+\PYG{l+s+sd}{\PYGZhy{} To find the next index to sum in `query`, we use `idx = (idx \PYGZam{} (idx + 1)) \PYGZhy{} 1`.}
+
+\PYG{l+s+sd}{Time: \PYGZdl{}O(\PYGZbs{}log N)\PYGZdl{} for both `add` (point update) and `query` (prefix sum).}
+\PYG{l+s+sd}{Space: \PYGZdl{}O(N)\PYGZdl{} to store the tree array.}
+\PYG{l+s+sd}{Status: Stress\PYGZhy{}tested}
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+
+\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{FenwickTree}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    A class that implements a 1D Fenwick Tree (Binary Indexed Tree).}
+\PYG{l+s+sd}{    This implementation uses 0\PYGZhy{}based indexing for its public methods.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{size}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Initializes the Fenwick Tree for an array of a given size.}
+\PYG{l+s+sd}{        All elements are initially zero.}
+
+\PYG{l+s+sd}{        Args:}
+\PYG{l+s+sd}{            size (int): The number of elements the tree will support.}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{*} \PYG{n}{size}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{add}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{idx}\PYG{p}{,} \PYG{n}{delta}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Adds a delta value to the element at a specific index.}
+\PYG{l+s+sd}{        This operation updates all prefix sums that include this index.}
+
+\PYG{l+s+sd}{        Args:}
+\PYG{l+s+sd}{            idx (int): The 0\PYGZhy{}based index of the element to update.}
+\PYG{l+s+sd}{            delta (int): The value to add to the element at `idx`.}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{k}{while} \PYG{n}{idx} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{)}\PYG{p}{:}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{n}{idx}\PYG{p}{]} \PYG{o}{+}\PYG{o}{=} \PYG{n}{delta}
+            \PYG{n}{idx} \PYG{o}{|}\PYG{o}{=} \PYG{n}{idx} \PYG{o}{+} \PYG{l+m+mi}{1}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{query}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{right}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Computes the prefix sum of elements up to (but not including) `right`.}
+\PYG{l+s+sd}{        This is the sum of the range [0, right\PYGZhy{}1].}
+
+\PYG{l+s+sd}{        Args:}
+\PYG{l+s+sd}{            right (int): The 0\PYGZhy{}based exclusive upper bound of the query range.}
+
+\PYG{l+s+sd}{        Returns:}
+\PYG{l+s+sd}{            int: The sum of elements in the prefix `[0, right\PYGZhy{}1]`.}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+        \PYG{n}{idx} \PYG{o}{=} \PYG{n}{right} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}
+        \PYG{n}{total\PYGZus{}sum} \PYG{o}{=} \PYG{l+m+mi}{0}
+        \PYG{k}{while} \PYG{n}{idx} \PYG{o}{\PYGZgt{}}\PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{n}{total\PYGZus{}sum} \PYG{o}{+}\PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tree}\PYG{p}{[}\PYG{n}{idx}\PYG{p}{]}
+            \PYG{n}{idx} \PYG{o}{=} \PYG{p}{(}\PYG{n}{idx} \PYG{o}{\PYGZam{}} \PYG{p}{(}\PYG{n}{idx} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}
+        \PYG{k}{return} \PYG{n}{total\PYGZus{}sum}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{query\PYGZus{}range}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{left}\PYG{p}{,} \PYG{n}{right}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Computes the sum of elements in the range [left, right\PYGZhy{}1].}
+
+\PYG{l+s+sd}{        Args:}
+\PYG{l+s+sd}{            left (int): The 0\PYGZhy{}based inclusive lower bound of the query range.}
+\PYG{l+s+sd}{            right (int): The 0\PYGZhy{}based exclusive upper bound of the query range.}
+
+\PYG{l+s+sd}{        Returns:}
+\PYG{l+s+sd}{            int: The sum of elements in the specified range.}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{k}{if} \PYG{n}{left} \PYG{o}{\PYGZgt{}}\PYG{o}{=} \PYG{n}{right}\PYG{p}{:}
+            \PYG{k}{return} \PYG{l+m+mi}{0}
+        \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{query}\PYG{p}{(}\PYG{n}{right}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{query}\PYG{p}{(}\PYG{n}{left}\PYG{p}{)}
+
+\end{MintedVerbatim}

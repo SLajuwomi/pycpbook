@@ -69,7 +69,6 @@
         \PYG{n}{root\PYGZus{}i} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{find}\PYG{p}{(}\PYG{n}{i}\PYG{p}{)}
         \PYG{n}{root\PYGZus{}j} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{find}\PYG{p}{(}\PYG{n}{j}\PYG{p}{)}
         \PYG{k}{if} \PYG{n}{root\PYGZus{}i} \PYG{o}{!=} \PYG{n}{root\PYGZus{}j}\PYG{p}{:}
-            \PYG{c+c1}{\PYGZsh{} Union by size: attach the smaller tree to the root of the larger tree.}
             \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{size}\PYG{p}{[}\PYG{n}{root\PYGZus{}i}\PYG{p}{]} \PYG{o}{\PYGZlt{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{size}\PYG{p}{[}\PYG{n}{root\PYGZus{}j}\PYG{p}{]}\PYG{p}{:}
                 \PYG{n}{root\PYGZus{}i}\PYG{p}{,} \PYG{n}{root\PYGZus{}j} \PYG{o}{=} \PYG{n}{root\PYGZus{}j}\PYG{p}{,} \PYG{n}{root\PYGZus{}i}
             \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{parent}\PYG{p}{[}\PYG{n}{root\PYGZus{}j}\PYG{p}{]} \PYG{o}{=} \PYG{n}{root\PYGZus{}i}

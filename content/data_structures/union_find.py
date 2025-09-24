@@ -51,7 +51,6 @@ class UnionFind:
         """
         if self.parent[i] == i:
             return i
-        # Path compression: set the parent directly to the root.
         self.parent[i] = self.find(self.parent[i])
         return self.parent[i]
 
@@ -68,7 +67,6 @@ class UnionFind:
         root_i = self.find(i)
         root_j = self.find(j)
         if root_i != root_j:
-            # Union by size: attach the smaller tree to the root of the larger tree.
             if self.size[root_i] < self.size[root_j]:
                 root_i, root_j = root_j, root_i
             self.parent[root_j] = root_i
