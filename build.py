@@ -142,7 +142,8 @@ def run_clean():
             except OSError as e:
                 print(f"Error removing file {file_path}: {e}", file=sys.stderr)
 
-    minted_dirs = glob.glob(os.path.join(root_dir, "**/_minted*", recursive=True))
+    minted_path_pattern = os.path.join(root_dir, "**", "_minted*")
+    minted_dirs = glob.glob(minted_path_pattern, recursive=True)
     for minted_dir in minted_dirs:
         if os.path.isdir(minted_dir):
             try:
