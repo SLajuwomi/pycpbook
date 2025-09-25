@@ -1,78 +1,73 @@
 """
-Author: PyCPBook Community
-Source: KACTL, CP-Algorithms, standard geometry texts
-Description: Implements a foundational Point class for 2D geometry problems.
-The class supports standard vector operations through overloaded operators,
-making geometric calculations intuitive and clean. It can handle both integer
-and floating-point coordinates.
+@description
+This script is a unit-style stress test for the foundational Point class and
+its associated geometric primitives. It validates the correctness of each
+operation by asserting its output against known, pre-calculated results for
+a variety of test cases.
 
-Operations supported:
-- Addition/Subtraction: `p1 + p2`, `p1 - p2`
-- Scalar Multiplication/Division: `p * scalar`, `p / scalar`
-- Dot Product: `p1.dot(p2)`
-- Cross Product: `p1.cross(p2)` (returns the 2D magnitude)
-- Squared Euclidean Distance: `p1.dist_sq(p2)`
-- Comparison: `p1 == p2`, `p1 < p2` (lexicographical)
+The test covers:
+- Vector arithmetic (addition, subtraction, scalar multiplication/division).
+- Dot product and cross product.
+- Squared distance calculation.
+- Comparison operators (equality and less-than for sorting).
+- The `orientation` function for collinear, clockwise, and counter-clockwise cases.
 
-A standalone `orientation` function is also provided to determine the
-orientation of three ordered points (collinear, clockwise, or counter-clockwise),
-which is a fundamental primitive for many geometric algorithms.
-Time: All Point methods and the `orientation` function are $O(1)$.
-Space: $O(1)$ per Point object.
-Status: Stress-tested
+This ensures the fundamental building blocks for all other geometry algorithms
+are reliable and correct.
 """
 
+import sys
+import os
 import math
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
-class Point:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def __repr__(self):
-        return f"Point({self.x}, {self.y})"
-
-    def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
-
-    def __lt__(self, other):
-        if self.x != other.x:
-            return self.x < other.x
-        return self.y < other.y
-
-    def __add__(self, other):
-        return Point(self.x + other.x, self.y + other.y)
-
-    def __sub__(self, other):
-        return Point(self.x - other.x, self.y - other.y)
-
-    def __mul__(self, scalar):
-        return Point(self.x * scalar, self.y * scalar)
-
-    def __truediv__(self, scalar):
-        return Point(self.x / scalar, self.y / scalar)
-
-    def dot(self, other):
-        return self.x * other.x + self.y * other.y
-
-    def cross(self, other):
-        return self.x * other.y - self.y * other.x
-
-    def dist_sq(self, other):
-        dx = self.x - other.x
-        dy = self.y - other.y
-        return dx * dx + dy * dy
+from content.geometry.point import Point, orientation
 
 
-def orientation(p, q, r):
-    """
-    Determines the orientation of the ordered triplet (p, q, r).
+def run_test():
+    p1 = Point(1, 2)
+    p2 = Point(4, 6)
 
-    Returns:
-        int: > 0 for counter-clockwise, < 0 for clockwise, 0 for collinear.
-    """
-    val = (q.x - p.x) * (r.y - q.y) - (q.y - p.y) * (r.x - q.x)
-    if val == 0:
-        return 0
-    return 1 if val > 0 else -1
+    # Test arithmetic
+    assert p1 + p2 == Point(5, 8)
+    assert p2 - p1 == Point(3, 4)
+    assert p1 * 3 == Point(3, 6)
+    assert p2 / 2 == Point(2, 3)
+
+    # Test products
+    assert p1.dot(p2) == 1 * 4 + 2 * 6 == 16
+    assert p1.cross(p2) == 1 * 6 - 2 * 4 == -2
+
+    # Test distance
+    assert (p2 - p1).dot(p2 - p1) == p1.dist_sq(p2)
+    assert p1.dist_sq(p2) == 3 * 3 + 4 * 4 == 25
+
+    # Test comparison
+    assert p1 == Point(1, 2)
+    assert not (p1 == p2)
+    assert p1 < p2
+    assert Point(1, 5) < Point(2, 3)
+    assert not (Point(2, 3) < Point(1, 5))
+    assert Point(1, 3) < Point(1, 5)
+
+    # Test orientation
+    o = Point(0, 0)
+    p_x_axis = Point(5, 0)
+    p_y_axis = Point(0, 5)
+    p_collinear = Point(10, 0)
+    p_ccw = Point(5, 5)
+    p_cw = Point(5, -5)
+
+    # Collinear
+    assert orientation(o, p_x_axis, p_collinear) == 0
+    # Counter-clockwise
+    assert orientation(o, p_x_axis, p_ccw) == 1
+    # Clockwise
+    assert orientation(o, p_x_axis, p_cw) == -1
+
+    print("Geometry Point Class and Primitives: All tests passed!")
+
+
+if __name__ == "__main__":
+    run_test()
