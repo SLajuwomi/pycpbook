@@ -224,6 +224,31 @@ def run_pdf():
             if not docstring:
                 print(f"Warning: No docstring found in {filename}.", file=sys.stderr)
 
+            code_to_render = source_code
+            # If a docstring exists, it's the first node. Remove it from the code to render.
+            if docstring and tree.body and isinstance(tree.body[0], ast.Expr):
+                docstring_node = tree.body[0]
+
+                # Verify that the node is indeed a string constant node.
+                is_string_node = False
+                if isinstance(docstring_node.value, ast.Constant) and isinstance(
+                    docstring_node.value.value, str
+                ):
+                    is_string_node = True  # Python 3.8+
+                elif "Str" in ast.__dict__ and isinstance(
+                    docstring_node.value, ast.Str
+                ):
+                    is_string_node = True  # Python < 3.8 compatibility
+
+                if is_string_node:
+                    lines = source_code.splitlines(True)
+                    # Get the line numbers of the docstring node.
+                    start_line = docstring_node.lineno - 1
+                    end_line = docstring_node.end_lineno
+                    # Reconstruct the code without the docstring lines.
+                    code_lines = lines[:start_line] + lines[end_line:]
+                    code_to_render = "".join(code_lines).lstrip()
+
             with open(generated_tex_path, "w", encoding="utf-8") as tex_file:
                 section_title = base_filename.replace("_", " ").title()
                 tex_file.write(f"\\subsection*{{{section_title}}}\n\n")
@@ -235,7 +260,7 @@ def run_pdf():
                     tex_file.write("\n\\end{docstring}\n\n")
 
                 tex_file.write("\\begin{minted}{python}\n")
-                tex_file.write(source_code)
+                tex_file.write(code_to_render)
                 tex_file.write("\n\\end{minted}\n")
 
         chapter_tex_path = os.path.join(chapter_path, "chapter.tex")
