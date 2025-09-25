@@ -38,3 +38,4 @@ _generated_*.tex
 
 # Final output
 content/_minted/
+repomix-output.xml
