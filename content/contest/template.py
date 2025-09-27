@@ -1,26 +1,24 @@
 """
 Author: PyCPBook Community
 Source: Various competitive programming resources
-Description: A standard template for Python in programming contests.
-It provides fast I/O, increased recursion limit, and common helper functions
-to accelerate development under time constraints.
+Description: A standard template for Python in programming contests. It provides
+fast I/O, an increased recursion limit, and common helper functions to accelerate
+development under time constraints.
 
 Fast I/O:
-Standard `input()` can be slow. This template redefines `input` to use
-`sys.stdin.readline()`, which is significantly faster for large inputs.
-Helper functions like `get_int()` and `get_ints()` are provided for convenience.
-For output, printing with `\\n` is generally fast enough, but for a huge number
-of output operations, `sys.stdout.write()` can be used.
+This template redefines `input` to use `sys.stdin.readline()` for performance.
+For a detailed guide on various fast I/O patterns and their usage, please refer
+to the "Fast I/O" section in this chapter.
 
 Recursion Limit:
-Python's default recursion limit (often 1000) is too low for problems
-involving deep recursion, such as tree/graph traversals on large datasets.
-`sys.setrecursionlimit(10**6)` increases this limit to avoid `RecursionError`.
+Python's default recursion limit (often 1000) is too low for problems that
+involve deep recursion. `sys.setrecursionlimit(10**6)` increases this limit to
+avoid `RecursionError` on large test cases.
 
 Usage:
-Place your problem-solving logic inside the `solve()` function. The main
-execution block is set up to call this function. If the problem has multiple
-test cases, you can use the commented-out loop in the `main` function.
+Place problem-solving logic inside the `solve()` function. The main execution
+block is set up to call this function, with a commented-out loop for handling
+multiple test cases.
 Time: N/A
 Space: N/A
 Status: Not applicable (Utility)
