@@ -57,27 +57,16 @@ def _escape_latex_text_only(text):
     )
 
 
-def _escape_latex(text):
+def _process_latex_part(text_part):
     """
-    Escapes a string for LaTeX, preserving math mode ($...$) and inline code (`...`).
-
-    It parses the string in layers:
-    1. It splits the text by math delimiters ($...$), leaving them untouched.
-    2. For non-math segments, it then splits by inline code delimiters (`...`).
-    3. The content of inline code is escaped and wrapped in \\texttt{}.
-    4. Any remaining plain text is fully escaped.
-
-    Args:
-        text (str): The input string, possibly containing mixed content.
-
-    Returns:
-        str: The processed string, safe for LaTeX inclusion.
+    Escapes a single part of text (a paragraph or list item) for LaTeX,
+    preserving math mode ($...$) and inline code (`...`).
     """
-    if text is None:
+    if text_part is None:
         return ""
 
     # Layer 1: Split by math blocks ($...$)
-    parts = re.split(r"(\$.*?\$)", text)
+    parts = re.split(r"(\$.*?\$)", text_part)
     final_parts = []
 
     for i, part in enumerate(parts):
@@ -100,6 +89,54 @@ def _escape_latex(text):
                 final_parts.append(_escape_latex_text_only(sub_part))
 
     return "".join(final_parts)
+
+
+def _escape_latex(text):
+    """
+    Escapes a full docstring for LaTeX, handling paragraphs, lists, math, and code.
+    """
+    if text is None:
+        return ""
+
+    # Regex to detect list items
+    bullet_pattern = re.compile(r"^\s*[-*]\s+(.*)")
+    enum_pattern = re.compile(r"^\s*\d+\.\s+(.*)")
+
+    # Split the docstring into logical blocks (paragraphs or lists)
+    blocks = re.split(r"\n\s*\n", text.strip())
+    output_blocks = []
+
+    for block in blocks:
+        lines = [line.strip() for line in block.split("\n") if line.strip()]
+        if not lines:
+            continue
+
+        # Check if all lines in the block form a list
+        is_bullet_list = all(bullet_pattern.match(line) for line in lines)
+        is_enum_list = all(enum_pattern.match(line) for line in lines)
+
+        if is_bullet_list:
+            list_items = ["\\begin{itemize}"]
+            for line in lines:
+                match = bullet_pattern.match(line)
+                if match:
+                    list_items.append(f"  \\item {_process_latex_part(match.group(1))}")
+            list_items.append("\\end{itemize}")
+            output_blocks.append("\n".join(list_items))
+        elif is_enum_list:
+            list_items = ["\\begin{enumerate}"]
+            for line in lines:
+                match = enum_pattern.match(line)
+                if match:
+                    list_items.append(f"  \\item {_process_latex_part(match.group(1))}")
+            list_items.append("\\end{enumerate}")
+            output_blocks.append("\n".join(list_items))
+        else:
+            # It's a paragraph
+            paragraph = " ".join(lines)
+            output_blocks.append(_process_latex_part(paragraph))
+
+    return "\n\\par\n".join(output_blocks)
 
 
 def run_clean():
