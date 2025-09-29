@@ -1,0 +1,8 @@
+- add page numbers
+- add list operator stuff, like pop(), append(), etc.
+- add is stuff, like is_prime(), is_palindrome(), isalpha(), isdigit(), etc.
+- add bitwise stuff, like &, |, ^, ~, <<, >>
+- add linked list implementation and operations
+- add set union, intersection, difference, symmetric difference, etc.
+- add optimization, napsack, stack, queue, backtracking, etc.
+- add page numbers
