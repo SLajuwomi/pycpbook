@@ -1,11 +1,8 @@
 """
-Author: PyCPBook Community
-Source: Based on Kahn's Algorithm from Introduction to Algorithms (CLRS)
-Description: Implements Topological Sort for a Directed Acyclic Graph (DAG).
+Implements Topological Sort for a Directed Acyclic Graph (DAG).
 A topological sort or topological ordering of a DAG is a linear ordering of its
 vertices such that for every directed edge from vertex `u` to vertex `v`, `u`
 comes before `v` in the ordering.
-
 This implementation uses Kahn's algorithm, which is BFS-based. The algorithm
 proceeds as follows:
 1. Compute the in-degree (number of incoming edges) for each vertex.
@@ -19,11 +16,7 @@ proceeds as follows:
    sort. If the count is less, it indicates that the graph contains at least one
    cycle, and a topological sort is not possible. In such a case, this function
    returns an empty list.
-
-Time: $O(V + E)$, where $V$ is the number of vertices and $E$ is the number of edges.
 Each vertex is enqueued and dequeued once, and every edge is processed once.
-Space: $O(V + E)$ to store the adjacency list, in-degree array, and the queue.
-Status: Stress-tested
 """
 
 from collections import deque

@@ -1,30 +1,21 @@
 """
-Author: PyCPBook Community
-Source: Python official documentation
-Description: This guide explains how to use Python's `heapq` module to implement a
+This guide explains how to use Python's `heapq` module to implement a
 min-priority queue. A heap is a specialized tree-based data structure that
 satisfies the heap property. In a min-heap, for any given node `C`, if `P` is a
 parent of `C`, then the key of `P` is less than or equal to the key of `C`. This
 means the smallest element is always at the root of the tree.
-
 The `heapq` module provides an efficient implementation of the min-heap algorithm.
 It operates directly on a standard Python `list`, which is a key aspect of its
 design.
-
 Key functions:
 - `heapq.heappush(heap, item)`: Pushes an `item` onto the `heap` (a list),
   maintaining the heap property. This operation is $O(\log N)$.
 - `heapq.heappop(heap)`: Pops and returns the smallest `item` from the `heap`,
   maintaining the heap property. This is also $O(\log N)$.
 - `heapq.heapify(x)`: Transforms a list `x` into a heap, in-place, in $O(N)$ time.
-
 Since `heapq` implements a min-heap, the element at index 0 (`heap[0]`) is always
 the smallest. To implement a max-heap, a common trick is to store the negative
 of the values (or use a custom wrapper class).
-
-Time: `heappush` and `heappop` are $O(\log N)$. `heapify` is $O(N)$.
-Space: $O(N)$ for storing N elements in the list.
-Status: To be stress-tested
 """
 
 import heapq

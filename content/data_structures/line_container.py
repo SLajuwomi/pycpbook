@@ -1,34 +1,24 @@
 """
-Author: PyCPBook Community
-Source: KACTL, CP-Algorithms
-Description: Implements a Line Container for the Convex Hull Trick. This data
+Implements a Line Container for the Convex Hull Trick. This data
 structure maintains a set of lines of the form `y = mx + c` and allows for
 efficiently querying the minimum `y` value for a given `x`. This is a key
 component in optimizing certain dynamic programming problems.
-
 This implementation is specialized for the following common case:
 - Queries ask for the minimum value.
 - The slopes `m` of the lines added are monotonically decreasing.
-
 The lines are stored in a deque, which acts as the lower convex hull. When a
 new line is added, we maintain the convexity of the hull by removing any lines
 from the back that become redundant. A line becomes redundant if the intersection
 point of its neighbors moves left, violating the convexity property. This check
 is done using cross-products to avoid floating-point arithmetic.
-
 Queries are performed using a binary search on the hull to find the optimal
 line for the given `x`. If the `x` values for queries are also monotonic, the
 query time can be improved to amortized $O(1)$ by using a pointer instead of
 a binary search.
-
 To adapt for maximum value queries, change the inequalities in `add` and `query`.
 To handle monotonically increasing slopes, add lines to the front of the deque
 and adjust the `add` method's popping logic accordingly.
-
-Time: $O(\\log N)$ for `query` due to binary search. Amortized $O(1)$ for `add`
 because each line is added and removed at most once.
-Space: $O(N)$ to store the lines on the convex hull.
-Status: Stress-tested
 """
 
 

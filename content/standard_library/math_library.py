@@ -1,10 +1,7 @@
 """
-Author: PyCPBook Community
-Source: Python official documentation
-Description: This guide highlights essential functions from Python's `math` module
+This guide highlights essential functions from Python's `math` module
 that are frequently used in competitive programming. These functions provide
 standard mathematical operations and constants.
-
 Key functions and constants:
 - `math.gcd(a, b)`: Computes the greatest common divisor of two integers.
 - `math.ceil(x)`: Returns the smallest integer greater than or equal to `x`.
@@ -15,13 +12,9 @@ Key functions and constants:
 - `math.log2(x)`: Returns the base-2 logarithm of `x`.
 - `math.inf`: A floating-point representation of positive infinity. Useful for
   initializing minimum/maximum values.
-
 These tools are fundamental for a wide range of problems, from number theory to
 geometry, providing a reliable and efficient standard library implementation.
-Time: `gcd` is $O(\log(\min(a,b)))$. `isqrt` is faster than `sqrt` for integers.
 The rest are typically $O(1)$.
-Space: $O(1)$ for all functions.
-Status: Stress-tested
 """
 
 import math

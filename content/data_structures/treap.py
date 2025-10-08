@@ -1,29 +1,20 @@
 """
-Author: PyCPBook Community
-Source: KACTL, CP-Algorithms
-Description: Implements a Treap, a randomized balanced binary search tree.
+Implements a Treap, a randomized balanced binary search tree.
 A Treap is a data structure that combines the properties of a binary search tree
 and a heap. Each node in the Treap has both a key and a randomly assigned priority.
 The keys follow the binary search tree property (left child's key < parent's key < right child's key),
 while the priorities follow the max-heap property (parent's priority > children's priorities).
-
 The random assignment of priorities ensures that, with high probability, the tree
 remains balanced, leading to logarithmic time complexity for standard operations.
 This implementation uses `split` and `merge` operations, which are a clean and
 powerful way to handle insertions and deletions.
-
 - `split(key)`: Splits the tree into two separate trees: one containing all keys
   less than `key`, and another containing all keys greater than or equal to `key`.
 - `merge(left, right)`: Merges two trees, `left` and `right`, under the assumption
   that all keys in `left` are smaller than all keys in `right`.
-
 Using these, `insert` and `delete` can be implemented elegantly.
-
-Time: $O(\\log N)$ on average for `insert`, `delete`, and `search` operations,
 where $N$ is the number of nodes in the Treap. The performance depends on the
 randomness of the priorities.
-Space: $O(N)$ to store the nodes of the Treap.
-Status: Stress-tested
 """
 
 import random

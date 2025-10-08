@@ -1,30 +1,22 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, TopCoder tutorials
-Description: Implements 1D and 2D prefix sum arrays for fast range sum queries.
+Implements 1D and 2D prefix sum arrays for fast range sum queries.
 Prefix sums (also known as summed-area tables in 2D) allow for the sum of any
 contiguous sub-array or sub-rectangle to be calculated in constant time after an
 initial linear-time precomputation.
-
 1D Prefix Sums:
 Given an array `A`, its prefix sum array `P` is defined such that `P[i]` is the
 sum of all elements from `A[0]` to `A[i-1]`. The sum of a range `[l, r-1]` can
 then be calculated in $O(1)$ as `P[r] - P[l]`.
-
 2D Prefix Sums:
 This extends the concept to a 2D grid. The prefix sum `P[i][j]` stores the sum
 of the rectangle from `(0, 0)` to `(i-1, j-1)`. The sum of an arbitrary
 rectangle defined by its top-left corner `(r1, c1)` and bottom-right corner
 `(r2-1, c2-1)` is calculated using the principle of inclusion-exclusion:
 `sum = P[r2][c2] - P[r1][c2] - P[r2][c1] + P[r1][c1]`.
-
-Time:
 - 1D: $O(N)$ for precomputation, $O(1)$ for each range query.
 - 2D: $O(R \\cdot C)$ for precomputation, $O(1)$ for each range query.
-Space:
 - 1D: $O(N)$ to store the prefix sum array.
 - 2D: $O(R \\cdot C)$ to store the prefix sum grid.
-Status: To be stress-tested
 """
 
 

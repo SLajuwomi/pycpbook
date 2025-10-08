@@ -1,27 +1,18 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, USACO Guide
-Description: Implements a Sparse Table for fast Range Minimum Queries (RMQ).
+Implements a Sparse Table for fast Range Minimum Queries (RMQ).
 This data structure is ideal for answering range queries on a static array
 for idempotent functions like min, max, or gcd.
-
 The core idea is to precompute the answers for all ranges that have a length
 that is a power of two. The table `st[k][i]` stores the minimum value in the
 range `[i, i + 2^k - 1]`. This precomputation takes $O(N \\log N)$ time.
-
 Once the table is built, a query for any arbitrary range `[l, r]` can be
 answered in $O(1)$ time. This is achieved by finding the largest power of two,
 `2^k`, that is less than or equal to the range length `r - l + 1`. The query
 then returns the minimum of two overlapping ranges: `[l, l + 2^k - 1]` and
 `[r - 2^k + 1, r]`. Because `min` is an idempotent function, the overlap
 does not affect the result.
-
 This implementation is for range minimum, but can be easily adapted for range
 maximum by changing `min` to `max`.
-
-Time: Precomputation is $O(N \\log N)$. Each query is $O(1)$.
-Space: $O(N \\log N)$ to store the sparse table.
-Status: Stress-tested
 """
 
 import math

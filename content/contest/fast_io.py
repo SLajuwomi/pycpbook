@@ -1,7 +1,5 @@
 """
-Author: PyCPBook Community
-Source: Python official documentation, TopCoder tutorials
-Description: This guide provides a comprehensive overview of fast I/O techniques
+This guide provides a comprehensive overview of fast I/O techniques
 in Python for competitive programming. Standard `input()` can be too slow for
 problems with large inputs, leading to Time Limit Exceeded (TLE) verdicts.
 Using the `sys` module provides a much faster alternative.

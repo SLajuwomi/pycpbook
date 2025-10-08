@@ -1,15 +1,11 @@
 """
-Author: PyCPBook Community
-Source: Python official documentation
-Description: This guide explains how to use Python's `bisect` module to
+This guide explains how to use Python's `bisect` module to
 efficiently search for elements and maintain the sorted order of a list. The
 module provides functions for binary searching, which is significantly faster
 than a linear scan for large lists.
-
 The `bisect` module is particularly useful for finding insertion points for new
 elements while keeping a list sorted, without having to re-sort the entire list
 after each insertion.
-
 Key functions:
 - `bisect.bisect_left(a, x)`: Returns an insertion point which comes before (to
   the left of) any existing entries of `x` in `a`. This is equivalent to finding
@@ -20,15 +16,10 @@ Key functions:
 - `bisect.insort_left(a, x)`: Inserts `x` into `a` in sorted order. This is
   efficient for finding the position, but the insertion itself can be slow ($O(N)$)
   as it requires shifting elements.
-
 These functions are fundamental for problems that require maintaining a sorted
 collection or performing searches like "count elements less than x" or
 "find the first element satisfying a condition."
-
-Time: `bisect_left` and `bisect_right` are $O(\log N)$. `insort_left` is $O(N)$
 due to the list insertion.
-Space: $O(1)$ for searches.
-Status: To be stress-tested
 """
 
 import bisect

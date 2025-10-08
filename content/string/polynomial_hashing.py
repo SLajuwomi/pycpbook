@@ -1,15 +1,11 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, KACTL
-Description: Implements a string hashing class using the polynomial rolling hash
+Implements a string hashing class using the polynomial rolling hash
 technique. This allows for efficient comparison of substrings. After an initial
 $O(N)$ precomputation on a string of length $N$, the hash of any substring can be
 calculated in $O(1)$ time.
-
 The hash of a string $s = s_0s_1...s_{k-1}$ is defined as:
 $H(s) = (s_0 p^0 + s_1 p^1 + ... + s_{k-1} p^{k-1}) \\mod m$
 where `p` is a base and `m` is a large prime modulus.
-
 To prevent collisions, especially against adversarial test cases, this
 implementation uses two key techniques:
 1.  Randomized Base: The base `p` is chosen randomly at runtime. It should be
@@ -17,13 +13,8 @@ implementation uses two key techniques:
 2.  Multiple Moduli: Hashing is performed with two different large prime moduli
     (`m1`, `m2`). Two substrings are considered equal only if their hash values
     match for both moduli. This drastically reduces the probability of collisions.
-
 The `query(l, r)` method calculates the hash of the substring `s[l...r-1]` by
 using precomputed prefix hashes and powers of `p`.
-
-Time: Precomputation is $O(N)$. Each query is $O(1)$.
-Space: $O(N)$ to store precomputed prefix hashes and powers of the base.
-Status: Stress-tested
 """
 
 import random

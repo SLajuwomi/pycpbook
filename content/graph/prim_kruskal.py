@@ -1,12 +1,9 @@
 """
-Author: PyCPBook Community
-Source: Introduction to Algorithms (CLRS)
-Description: This file implements two classic greedy algorithms for finding the
+This file implements two classic greedy algorithms for finding the
 Minimum Spanning Tree (MST) of an undirected, weighted graph: Kruskal's algorithm
 and Prim's algorithm. An MST is a subset of the edges of a connected,
 edge-weighted undirected graph that connects all the vertices together, without
 any cycles and with the minimum possible total edge weight.
-
 Kruskal's Algorithm:
 This algorithm treats the graph as a forest and each node as an individual tree.
 It sorts all the edges by weight in non-decreasing order. Then, it iterates
@@ -14,21 +11,16 @@ through the sorted edges, adding an edge to the MST if and only if it does not
 form a cycle with the edges already added. A Union-Find data structure is used
 to efficiently detect cycles. The algorithm terminates when V-1 edges have been
 added to the MST (for a connected graph).
-
 Prim's Algorithm:
 This algorithm grows the MST from an arbitrary starting vertex. It maintains a
 set of vertices already in the MST. At each step, it finds the minimum-weight
 edge that connects a vertex in the MST to a vertex outside the MST and adds this
 edge and vertex to the tree. A priority queue is used to efficiently select this
 minimum-weight edge.
-
-Time:
 - Kruskal's: $O(E \\log E)$ or $O(E \\log V)$, dominated by sorting the edges.
 - Prim's: $O(E \\log V)$ using a binary heap as a priority queue.
-Space:
 - Kruskal's: $O(V + E)$ for the edge list and Union-Find structure.
 - Prim's: $O(V + E)$ for the adjacency list, priority queue, and visited array.
-Status: Stress-tested
 """
 
 import heapq

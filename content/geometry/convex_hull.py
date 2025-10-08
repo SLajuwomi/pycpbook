@@ -1,10 +1,7 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms (Monotone Chain Algorithm)
-Description: Implements the Monotone Chain algorithm (also known as Andrew's
+Implements the Monotone Chain algorithm (also known as Andrew's
 algorithm) to find the convex hull of a set of 2D points. The convex hull is
 the smallest convex polygon that contains all the given points.
-
 The algorithm works as follows:
 1.  Sort all points lexicographically (first by x-coordinate, then by y-coordinate).
     This step takes $O(N \\log N)$ time.
@@ -19,12 +16,8 @@ The algorithm works as follows:
 4.  Combine the lower and upper hulls to form the complete convex hull. The
     endpoints (the lexicographically smallest and largest points) will be
     included in both hulls, so they must be removed from one to avoid duplication.
-
 This implementation relies on the `Point` class and `orientation` primitive from
 the `content.geometry.point` module.
-Time: $O(N \\log N)$, dominated by the initial sorting of points.
-Space: $O(N)$ to store the points and the resulting hull.
-Status: Stress-tested
 """
 
 from content.geometry.point import Point, orientation

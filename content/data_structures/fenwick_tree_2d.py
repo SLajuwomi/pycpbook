@@ -1,28 +1,19 @@
 """
-Author: PyCPBook Community
-Source: KACTL, TopCoder tutorials
-Description: Implements a 2D Fenwick Tree (Binary Indexed Tree). This data
+Implements a 2D Fenwick Tree (Binary Indexed Tree). This data
 structure extends the 1D Fenwick Tree to support point updates and prefix
 rectangle sum queries on a 2D grid.
-
 The primary operations are:
 1.  add(r, c, delta): Adds `delta` to the element at grid cell (r, c).
 2.  query(r, c): Computes the sum of the rectangle from (0, 0) to (r-1, c-1).
-
 A 2D Fenwick Tree can be conceptualized as a Fenwick Tree where each element is
 itself another Fenwick Tree. The `add` and `query` operations therefore involve
 traversing the tree structure in both dimensions, resulting in a time complexity
 that is the product of the logarithmic complexities of each dimension.
-
 The `query_range` method uses the principle of inclusion-exclusion on the prefix
 rectangle sums to calculate the sum of any arbitrary sub-rectangle. Given a
 rectangle defined by top-left (r1, c1) and bottom-right (r2-1, c2-1), the sum is:
 Sum(r2, c2) - Sum(r1, c2) - Sum(r2, c1) + Sum(r1, c1),
 where Sum(r, c) is the prefix sum from (0,0) to (r-1, c-1).
-
-Time: $O(\\log R \\cdot \\log C)$ for `add` and `query` on an $R \\times C$ grid.
-Space: $O(R \\cdot C)$ to store the 2D tree.
-Status: Stress-tested
 """
 
 

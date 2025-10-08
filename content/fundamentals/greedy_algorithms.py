@@ -1,7 +1,5 @@
 """
-Author: PyCPBook Community
-Source: Introduction to Algorithms (CLRS)
-Description: This guide explains the greedy problem-solving paradigm, a technique
+This guide explains the greedy problem-solving paradigm, a technique
 for solving optimization problems by making the locally optimal choice at each
 stage with the hope of finding a global optimum. For a greedy algorithm to work,
 the problem must exhibit two key properties:
@@ -10,19 +8,13 @@ the problem must exhibit two key properties:
     current step, without regard for future choices, can lead to a global solution.
 2.  Optimal Substructure: An optimal solution to the problem contains within it
     optimal solutions to subproblems.
-
 The example below, the Activity Selection Problem, is a classic illustration
 of the greedy method. Given a set of activities each with a start and finish
 time, the goal is to select the maximum number of non-overlapping activities
 that can be performed by a single person.
-
 The greedy choice is to always select the next activity that finishes earliest
 among those that do not conflict with the last-chosen activity. This choice
 maximizes the remaining time for other activities.
-
-Time: $O(N \\log N)$, dominated by sorting the activities by finish time.
-Space: $O(N)$ to store the activities.
-Status: Stress-tested
 """
 
 

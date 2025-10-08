@@ -1,11 +1,8 @@
 """
-Author: PyCPBook Community
-Source: Based on common implementations in competitive programming resources
-Description: Implements the Union-Find data structure, also known as
+Implements the Union-Find data structure, also known as
 Disjoint Set Union (DSU). It is used to keep track of a partition of a set
 of elements into a number of disjoint, non-overlapping subsets. The two primary
 operations are finding the representative (or root) of a set and merging two sets.
-
 This implementation includes two key optimizations:
 1.  Path Compression: During a `find` operation, it makes every node on the
     path from the query node to the root point directly to the root. This
@@ -13,14 +10,10 @@ This implementation includes two key optimizations:
 2.  Union by Size: During a `union` operation, it always attaches the root of
     the smaller tree to the root of the larger tree. This helps in keeping
     the trees shallow, which speeds up future `find` operations.
-
 The combination of these two techniques makes the amortized time complexity
 of both `find` and `union` operations nearly constant.
-Time: $O(\\alpha(N))$ on average for both find and union operations, where $alpha$
 is the extremely slow-growing inverse Ackermann function. For all practical
 purposes, this is considered constant time.
-Space: $O(N)$ to store the parent and size arrays for N elements.
-Status: Stress-tested
 """
 
 

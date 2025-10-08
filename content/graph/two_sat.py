@@ -1,12 +1,9 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, KACTL
-Description: Implements a solver for 2-Satisfiability (2-SAT) problems.
+Implements a solver for 2-Satisfiability (2-SAT) problems.
 A 2-SAT problem consists of a boolean formula in 2-Conjunctive Normal Form,
 which is a conjunction (AND) of clauses, where each clause is a disjunction (OR)
 of two literals. The goal is to find a satisfying assignment of true/false values
 to the variables.
-
 This problem can be solved in linear time by reducing it to a graph problem.
 The reduction works as follows:
 1.  Create an "implication graph" with `2N` vertices for `N` variables. For each
@@ -25,14 +22,9 @@ The reduction works as follows:
     topological ordering of this "condensation graph". For each variable `x_i`,
     if the SCC containing `¬x_i` appears before the SCC containing `x_i` in this
     ordering, we must assign `x_i` to true. Otherwise, we assign it to false.
-
 This implementation uses the `find_sccs` function (Tarjan's algorithm) to solve
 the problem.
-
-Time: $O(V+E) = O(N+M)$, where $N$ is the number of variables and $M$ is the
 number of clauses. The graph has $2N$ vertices and $2M$ edges.
-Space: $O(N+M)$ to store the implication graph and SCC information.
-Status: Stress-tested
 """
 
 import sys

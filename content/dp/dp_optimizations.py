@@ -1,10 +1,7 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, USACO Guide
-Description: This file explains and demonstrates several advanced dynamic programming
+This file explains and demonstrates several advanced dynamic programming
 optimizations. The primary focus is the Convex Hull Trick, with conceptual
 explanations for Knuth-Yao Speedup and Divide and Conquer Optimization.
-
 Convex Hull Trick (CHT):
 This optimization applies to DP recurrences of the form:
 `dp[i] = min_{j<i} (dp[j] + b[j] * a[i])` (or similar).
@@ -16,7 +13,6 @@ queries. The example below solves a problem with the recurrence
 `dp[i] = C + min_{j<i} (dp[j] + (p[i] - p[j])^2)`, which can be rearranged into
 the required line form. This works efficiently if the slopes of the lines being
 added are monotonic.
-
 Knuth-Yao Speedup:
 This optimization applies to recurrences of the form
 `dp[i][j] = C[i][j] + min_{i<=k<j} (dp[i][k] + dp[k+1][j])`, such as in the
@@ -26,7 +22,6 @@ for `a <= b <= c <= d`). The key insight is that the optimal splitting point `k`
 for `dp[i][j]`, denoted `opt[i][j]`, is monotonic: `opt[i][j-1] <= opt[i][j] <= opt[i+1][j]`.
 This property allows us to reduce the search space for `k` from `O(j-i)` to
 `opt[i+1][j] - opt[i][j-1]`, improving the total time complexity from $O(N^3)$ to $O(N^2)$.
-
 Divide and Conquer Optimization:
 This technique applies to recurrences of the form `dp[i][j] = min_{0<=k<j} (dp[i-1][k] + C[k][j])`.
 A naive computation would take $O(N^2)$ for each `i`, leading to $O(K*N^2)$ total
@@ -38,10 +33,6 @@ optimal `k` for the midpoint `mid = (l+r)/2`. Then, recursively, the optimal `k`
 the left half `[l, mid-1]` must be in a smaller range, and similarly for the
 right half. This divide and conquer approach computes all `dp[i][j]` for a fixed `i`
 in $O(N \\log N)$ time.
-
-Time: Varies by optimization. CHT: $O(N \\log N)$ or $O(N)$ amortized.
-Space: Varies.
-Status: Conceptual (Knuth-Yao, D&C), Stress-tested (CHT example).
 """
 
 import sys

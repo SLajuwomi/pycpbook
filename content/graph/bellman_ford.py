@@ -1,29 +1,20 @@
 """
-Author: PyCPBook Community
-Source: Introduction to Algorithms (CLRS)
-Description: Implements the Bellman-Ford algorithm for finding the single-source
+Implements the Bellman-Ford algorithm for finding the single-source
 shortest paths in a weighted graph. Unlike Dijkstra's algorithm, Bellman-Ford
 can handle graphs with negative edge weights.
-
 The algorithm works by iteratively relaxing edges. It repeats a relaxation step
 $V-1$ times, where $V$ is the number of vertices. In each relaxation step, it
 iterates through all edges `(u, v)` and updates the distance to `v` if a shorter
 path is found through `u`. After $V-1$ iterations, the shortest paths are
 guaranteed to be found, provided there are no negative-weight cycles reachable
 from the source.
-
 A final, $V$-th iteration is performed to detect negative-weight cycles. If any
 distance can still be improved during this iteration, it means a negative-weight
 cycle exists, and the shortest paths are not well-defined (they can be infinitely
 small).
-
 This implementation takes an edge list as input, which is a common and convenient
 representation for this algorithm.
-
-Time: $O(V \\cdot E)$, where $V$ is the number of vertices and $E$ is the number
 of edges. The algorithm iterates through all edges $V$ times.
-Space: $O(V + E)$ to store the edge list and the distances array.
-Status: Stress-tested
 """
 
 

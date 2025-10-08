@@ -1,17 +1,11 @@
 """
-Author: PyCPBook Community
-Source: Self, Wikipedia, Python docs
-Description: Predicate-style checks commonly used in competitive programming, with
+Predicate-style checks commonly used in competitive programming, with
 efficient helpers and concise examples. Includes primality testing optimized for
 contest ranges with a fallback to Miller-Rabin for larger values, configurable
 palindrome checking for strings and integers, and a curated set of Python built-ins
 that are useful for quick validations and transformations. Demonstrates Unicode
 nuances between `str.isdigit`, `str.isdecimal`, and `str.isnumeric`.
-
-Time: Varies by operation; `is_prime` is $O(\\sqrt{n})$ for small n and Miller-Rabin
 fallback is $O(k \\cdot (\\log n)^2)$
-Space: $O(1)$
-Status: Stress-tested
 """
 
 from content.math.miller_rabin import is_prime as mr_is_prime

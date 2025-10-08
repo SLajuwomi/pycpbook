@@ -1,12 +1,9 @@
 """
-Author: PyCPBook Community
-Source: Standard computer science curriculum (e.g., CLRS)
-Description: This guide provides a template and explanation for recursion and
+This guide provides a template and explanation for recursion and
 backtracking. Backtracking is a general algorithmic technique for solving
 problems recursively by trying to build a solution incrementally, one piece at a
 time, and removing those solutions ("backtracking") that fail to satisfy the
 constraints of the problem at any point in time.
-
 The core of backtracking is a recursive function that follows a "choose,
 explore, unchoose" pattern:
 1.  **Choose**: Make a choice at the current state. This could be including an
@@ -17,17 +14,12 @@ explore, unchoose" pattern:
 3.  **Unchoose**: After the recursive call returns, undo the choice made in
     step 1. This is the "backtracking" step. It allows the algorithm to explore
     other paths from the current state.
-
 The example below, "generating all subsets," demonstrates this pattern perfectly.
 To generate all subsets of a set of numbers, we can iterate through the numbers.
 For each number, we have two choices: include it in the current subset, or not
 include it. The backtracking function explores both paths.
-
-Time: $O(N \\cdot 2^N)$. There are $2^N$ possible subsets. For each subset, it
 takes up to $O(N)$ time to create a copy to add to the results list.
-Space: $O(N)$ for the recursion depth and the temporary list storing the current
 subset. The output list itself requires $O(N \\cdot 2^N)$ space.
-Status: To be stress-tested
 """
 
 

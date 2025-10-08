@@ -1,13 +1,10 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, various competitive programming tutorials
-Description: Implements a Segment Tree with lazy propagation. This powerful
+Implements a Segment Tree with lazy propagation. This powerful
 data structure is designed to handle range updates and range queries efficiently.
 While a standard Segment Tree can perform range queries in $O(\\log N)$ time,
 updates are limited to single points. Lazy propagation extends this capability
 to allow range updates (e.g., adding a value to all elements in a range)
 to also be performed in $O(\\log N)$ time.
-
 The core idea is to postpone updates to tree nodes and apply them only when
 necessary. When an update is requested for a range `[l, r]`, we traverse the
 tree. If a node's range is fully contained within `[l, r]`, instead of updating
@@ -15,16 +12,11 @@ all its children, we store the pending update value in a `lazy` array for that
 node and update the node's main value. We then stop traversing down that path.
 This pending update is "pushed" down to its children only when a future query
 or update needs to access one of the children.
-
 This implementation supports range addition updates and range sum queries.
 The logic can be adapted for other associative operations like range minimum/maximum
 and range assignment.
-
-Time: $O(\\log N)$ for both `update` (range update) and `query` (range query).
 The initial `build` operation takes $O(N)$ time.
-Space: $O(N)$ to store the tree and lazy arrays. A size of $4N$ is allocated
 to be safe for a complete binary tree representation.
-Status: Stress-tested
 """
 
 

@@ -1,7 +1,5 @@
 """
-Author: PyCPBook Community
-Source: Collective experience from competitive programmers.
-Description: This section outlines common debugging techniques and tricks
+This section outlines common debugging techniques and tricks
 useful in a competitive programming context. Since standard debuggers are
 often unavailable or too slow on online judges, these methods are invaluable.
 

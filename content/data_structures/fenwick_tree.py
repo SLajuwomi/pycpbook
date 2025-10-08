@@ -1,27 +1,18 @@
 """
-Author: PyCPBook Community
-Source: Based on common implementations in competitive programming resources
-Description: Implements a 1D Fenwick Tree, also known as a Binary Indexed Tree (BIT).
+Implements a 1D Fenwick Tree, also known as a Binary Indexed Tree (BIT).
 This data structure is used to efficiently calculate prefix sums (or any other
 associative and invertible operation) on an array while supporting point updates.
-
 A Fenwick Tree of size N allows for two main operations, both in logarithmic time:
 1.  add(idx, delta): Adds `delta` to the element at index `idx`.
 2.  query(right): Computes the sum of the elements in the range [0, right).
-
 The core idea is that any integer can be represented as a sum of powers of two.
 Similarly, a prefix sum can be represented as a sum of sums over certain
 sub-ranges, where the size of these sub-ranges are powers of two. The tree
 stores these precomputed sub-range sums.
-
 This implementation is 0-indexed for user-facing operations, which is a common
 convention in Python. The internal logic is adapted to work with this indexing.
 - To find the next index to update in `add`, we use `idx |= idx + 1`.
 - To find the next index to sum in `query`, we use `idx = (idx & (idx + 1)) - 1`.
-
-Time: $O(\\log N)$ for both `add` (point update) and `query` (prefix sum).
-Space: $O(N)$ to store the tree array.
-Status: Stress-tested
 """
 
 

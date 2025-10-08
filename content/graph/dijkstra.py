@@ -1,14 +1,10 @@
 """
-Author: PyCPBook Community
-Source: Introduction to Algorithms (CLRS)
-Description: Implements Dijkstra's algorithm for finding the single-source
+Implements Dijkstra's algorithm for finding the single-source
 shortest paths in a weighted graph with non-negative edge weights.
-
 Dijkstra's algorithm maintains a set of visited vertices and finds the shortest
 path from a source vertex to all other vertices in the graph. It uses a priority
 queue to greedily select the unvisited vertex with the smallest distance from
 the source.
-
 The algorithm proceeds as follows:
 1. Initialize a distances array with infinity for all vertices except the source,
    which is set to 0.
@@ -19,16 +15,11 @@ The algorithm proceeds as follows:
 5. For each neighbor `v` of `u`, calculate the distance through `u`. If this
    new path is shorter than the known distance to `v`, update the distance and
    add `v` to the priority queue with its new, shorter distance.
-
 This implementation uses Python's `heapq` module as a min-priority queue.
 The graph is represented by an adjacency list where each entry is a tuple
 (neighbor, weight).
-
-Time: $O(E \\log V)$, where $V$ is the number of vertices and $E$ is the number
 of edges. The log factor comes from the priority queue operations.
-Space: $O(V + E)$ to store the adjacency list, distances array, and the
 priority queue.
-Status: Stress-tested
 """
 
 import heapq

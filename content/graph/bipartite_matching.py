@@ -1,18 +1,14 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, USACO Guide
-Description: Implements an algorithm to find the maximum matching in a bipartite
+Implements an algorithm to find the maximum matching in a bipartite
 graph. A bipartite graph is one whose vertices can be divided into two disjoint
 and independent sets, U and V, such that every edge connects a vertex in U to
 one in V. A matching is a set of edges without common vertices. The goal is to
 find a matching with the maximum possible number of edges.
-
 This implementation uses the augmenting path algorithm, a common approach based on
 Ford-Fulkerson. It works by repeatedly finding "augmenting paths" in the graph.
 An augmenting path is a path that starts from an unmatched vertex in the left
 partition (U), ends at an unmatched vertex in the right partition (V), and
 alternates between edges that are not in the current matching and edges that are.
-
 The algorithm proceeds as follows:
 1.  Initialize an empty matching.
 2.  For each vertex `u` in the left partition U:
@@ -28,12 +24,8 @@ The algorithm proceeds as follows:
     along the path.
 4.  The process continues until no more augmenting paths can be found. The size
     of the resulting matching is the maximum possible.
-
-Time: $O(E \\cdot V)$, where $V = |U| + |V|$ is the total number of vertices and
 $E$ is the number of edges. For each vertex in U, we may perform a DFS that
 traverses the entire graph.
-Space: $O(V)$ to store the matching and visited arrays for the DFS.
-Status: Stress-tested
 """
 
 

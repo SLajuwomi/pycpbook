@@ -1,10 +1,7 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, USACO Guide
-Description: Implements Lowest Common Ancestor (LCA) queries on a tree using the
+Implements Lowest Common Ancestor (LCA) queries on a tree using the
 binary lifting technique. This method allows for finding the LCA of any two nodes
 in logarithmic time after a precomputation step.
-
 The algorithm consists of two main parts:
 1.  Precomputation:
     - A Depth-First Search (DFS) is performed from the root of the tree to
@@ -14,7 +11,6 @@ The algorithm consists of two main parts:
       of node `i`. This table is filled using dynamic programming: the `2^j`-th
       ancestor of `i` is the `2^(j-1)`-th ancestor of its `2^(j-1)`-th ancestor.
       `up[i][j] = up[up[i][j-1]][j-1]`.
-
 2.  Querying for LCA(u, v):
     - First, the depths of `u` and `v` are equalized by moving the deeper node
       upwards. This is done efficiently by "lifting" it in jumps of powers of two.
@@ -24,10 +20,6 @@ The algorithm consists of two main parts:
       `up[u][j] != up[v][j]`).
     - After this process, `u` and `v` will be direct children of the LCA. The
       LCA is then the parent of `u` (or `v`), which is `up[u][0]`.
-
-Time: Precomputation is $O(N \\log N)$. Each query is $O(\\log N)$.
-Space: $O(N \\log N)$ to store the `up` table.
-Status: Stress-tested
 """
 
 

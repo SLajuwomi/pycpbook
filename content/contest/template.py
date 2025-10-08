@@ -1,7 +1,5 @@
 """
-Author: PyCPBook Community
-Source: Various competitive programming resources
-Description: A standard template for Python in programming contests. It provides
+A standard template for Python in programming contests. It provides
 fast I/O, an increased recursion limit, and common helper functions to accelerate
 development under time constraints.
 

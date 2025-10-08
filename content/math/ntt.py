@@ -1,13 +1,10 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, KACTL
-Description: Implements the Number Theoretic Transform (NTT) for fast
+Implements the Number Theoretic Transform (NTT) for fast
 polynomial multiplication over a finite field. NTT is an adaptation of the
 Fast Fourier Transform (FFT) for modular arithmetic, avoiding floating-point
 precision issues. It is commonly used in problems involving polynomial
 convolution, such as multiplying large numbers or finding the number of ways
 to form a sum.
-
 The algorithm works by:
 1.  Choosing a prime modulus `MOD` of the form `c * 2^k + 1` and a primitive
     root `ROOT` of `MOD`.
@@ -17,13 +14,8 @@ The algorithm works by:
 3.  Multiplying the resulting point-value representations element-wise in $O(N)$ time.
 4.  Interpolating the resulting polynomial back to coefficient representation using
     the inverse NTT in $O(N \\log N)$ time.
-
 This implementation uses the prime `MOD = 998244353`, which is a standard choice
 in competitive programming.
-
-Time: $O(N \\log N)$ for multiplying two polynomials of degree up to $N$.
-Space: $O(N)$ to store the polynomials and intermediate values.
-Status: Stress-tested
 """
 
 from content.math.modular_arithmetic import power

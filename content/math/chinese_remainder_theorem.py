@@ -1,7 +1,5 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms
-Description: Implements a solver for a system of linear congruences using the
+Implements a solver for a system of linear congruences using the
 Chinese Remainder Theorem (CRT). Given a system of congruences:
 $x \\equiv a_1 \\pmod{n_1}$
 $x \\equiv a_2 \\pmod{n_2}$
@@ -9,22 +7,16 @@ $x \\equiv a_2 \\pmod{n_2}$
 $x \\equiv a_k \\pmod{n_k}$
 the algorithm finds a solution `x` that satisfies all of them. This implementation
 handles the general case where the moduli `n_i` are not necessarily pairwise coprime.
-
 The algorithm works by iteratively combining pairs of congruences. Given a solution
 for the first `i-1` congruences, `x \equiv a_{res} (mod n_{res})`, it combines
 this with the i-th congruence `x \equiv a_i (mod n_i)`.
-
 This requires solving a linear congruence of the form `k * n_{res} \equiv a_i - a_{res} (mod n_i)`.
 A solution exists if and only if `(a_i - a_{res})` is divisible by `g = gcd(n_{res}, n_i)`.
 If a solution exists, the two congruences are merged into a new one:
 `x \equiv a_{new} (mod n_{new})`, where `n_{new} = lcm(n_{res}, n_i)`.
 This process is repeated for all congruences. If at any step a solution does not exist,
 the entire system has no solution.
-
-Time: $O(K \\cdot \\log(\max(n_i)))$, where $K$ is the number of congruences.
 Each merge step involves `extended_gcd`, which is logarithmic.
-Space: $O(1)$
-Status: Stress-tested
 """
 
 from content.math.modular_arithmetic import extended_gcd

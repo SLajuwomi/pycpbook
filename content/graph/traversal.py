@@ -1,9 +1,6 @@
 """
-Author: PyCPBook Community
-Source: Introduction to Algorithms (CLRS)
-Description: This file implements Breadth-First Search (BFS) and Depth-First Search (DFS),
+This file implements Breadth-First Search (BFS) and Depth-First Search (DFS),
 the two most fundamental graph traversal algorithms.
-
 Breadth-First Search (BFS):
 BFS explores a graph layer by layer from a starting source node. It finds all
 nodes at a distance of 1 from the source, then all nodes at a distance of 2,
@@ -17,7 +14,6 @@ other node in an unweighted graph. The algorithm proceeds as follows:
    visited and enqueue it.
 5. Repeat until the queue is empty. The collection of dequeued nodes forms the
    traversal order.
-
 Depth-First Search (DFS):
 DFS explores a graph by traversing as far as possible along each branch before
 backtracking. It's commonly used for tasks like cycle detection, topological
@@ -29,12 +25,8 @@ sorting, and finding connected components. The iterative algorithm is as follows
    visited and push it onto the stack.
 5. Repeat until the stack is empty. The collection of popped nodes forms the
    traversal order.
-
-Time: $O(V + E)$ for both BFS and DFS, where $V$ is the number of vertices and
 $E$ is the number of edges. Each vertex and edge is visited exactly once.
-Space: $O(V)$ in the worst case for storing the queue (BFS) or stack (DFS),
 and the visited array.
-Status: Stress-tested
 """
 
 from collections import deque

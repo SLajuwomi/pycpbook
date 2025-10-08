@@ -1,11 +1,8 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, KACTL
-Description: Implements the Aho-Corasick algorithm for finding all occurrences
+Implements the Aho-Corasick algorithm for finding all occurrences
 of multiple patterns in a text simultaneously. This algorithm combines a trie
 (prefix tree) with failure links to achieve linear time complexity with respect
 to the sum of the text length and the total length of all patterns.
-
 The algorithm works in two main stages:
 1.  Preprocessing (Building the Automaton):
     a. A trie is constructed from the set of all patterns. Each node in the
@@ -16,7 +13,6 @@ The algorithm works in two main stages:
        points to the longest proper suffix of the string corresponding to `u`
        that is also a prefix of some pattern in the set. These links are
        computed using a Breadth-First Search (BFS) starting from the root.
-
 2.  Searching:
     a. The algorithm processes the text character by character, traversing the
        automaton. It starts at the root.
@@ -26,12 +22,8 @@ The algorithm works in two main stages:
     c. At each state, it collects all matches. This is done by checking the
        `output` of the current node and recursively following failure links to
        find all patterns that end as a suffix of the current prefix.
-
-Time: Preprocessing is $O(L)$, where $L$ is the total length of all patterns.
 Searching is $O(N + Z)$, where $N$ is the length of the text and $Z$ is the
 total number of matches found.
-Space: $O(L)$ to store the trie and associated data.
-Status: Stress-tested
 """
 
 from collections import deque

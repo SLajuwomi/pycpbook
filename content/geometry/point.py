@@ -1,11 +1,8 @@
 """
-Author: PyCPBook Community
-Source: KACTL, CP-Algorithms, standard geometry texts
-Description: Implements a foundational Point class for 2D geometry problems.
+Implements a foundational Point class for 2D geometry problems.
 The class supports standard vector operations through overloaded operators,
 making geometric calculations intuitive and clean. It can handle both integer
 and floating-point coordinates.
-
 Operations supported:
 - Addition/Subtraction: `p1 + p2`, `p1 - p2`
 - Scalar Multiplication/Division: `p * scalar`, `p / scalar`
@@ -13,13 +10,9 @@ Operations supported:
 - Cross Product: `p1.cross(p2)` (returns the 2D magnitude)
 - Squared Euclidean Distance: `p1.dist_sq(p2)`
 - Comparison: `p1 == p2`, `p1 < p2` (lexicographical)
-
 A standalone `orientation` function is also provided to determine the
 orientation of three ordered points (collinear, clockwise, or counter-clockwise),
 which is a fundamental primitive for many geometric algorithms.
-Time: All Point methods and the `orientation` function are $O(1)$.
-Space: $O(1)$ per Point object.
-Status: Stress-tested
 """
 
 import math

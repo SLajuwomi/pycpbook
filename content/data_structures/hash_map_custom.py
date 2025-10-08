@@ -1,32 +1,22 @@
 """
-Author: PyCPBook Community
-Source: KACTL, neal wu's blog
-Description: Provides an explanation and an example of a custom hash for Python's
+Provides an explanation and an example of a custom hash for Python's
 dictionaries and sets to prevent slowdowns from anti-hash tests. In competitive
 programming, some problems use test cases specifically designed to cause many
 collisions in standard hash table implementations (like Python's dict),
 degrading their performance from average $O(1)$ to worst-case $O(N)$.
-
 This can be mitigated by using a hash function with a randomized component, so
 that the hash values are unpredictable to an adversary. A common technique is to
 XOR the object's standard hash with a fixed, randomly generated constant.
-
 The `splitmix64` function shown below is a high-quality hash function that can be
 used for this purpose. It's simple, fast, and provides good distribution.
-
 To use a custom hash, you can wrap integer or tuple keys in a custom class that
 overrides the `__hash__` and `__eq__` methods.
-
 Example usage with a dictionary:
 `my_map = {}`
 `my_map[CustomHash(123)] = "value"`
-
 This forces Python's `dict` to use your `CustomHash` object's `__hash__` method,
 thus using the randomized hash function. This is particularly useful in problems
 involving hashing of tuples, such as coordinates or polynomial hash values.
-Time: The hash computation is $O(1)$. Dictionary operations remain amortized $O(1)$.
-Space: Adds a small constant overhead per key for the wrapper object.
-Status: Not applicable (Utility/Informational)
 """
 
 import time

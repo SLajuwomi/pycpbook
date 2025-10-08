@@ -1,9 +1,6 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, Wikipedia
-Description: Implements the Sieve of Eratosthenes, a highly efficient algorithm
+Implements the Sieve of Eratosthenes, a highly efficient algorithm
 for finding all prime numbers up to a specified integer `n`.
-
 The algorithm works by iteratively marking as composite (i.e., not prime) the
 multiples of each prime, starting with the first prime number, 2.
 1. Create a boolean list `is_prime` of size `n+1`, initializing all entries
@@ -17,14 +14,9 @@ multiples of each prime, starting with the first prime number, 2.
    a smaller prime factor `k`.
 5. After the loop, the `is_prime` array contains `True` at indices that are
    prime numbers and `False` otherwise.
-
 This implementation returns the boolean array itself, which is often more
 versatile in contests than a list of primes (e.g., for quick primality checks).
 A list of primes can be easily generated from this array if needed.
-
-Time: $O(N \\log \\log N)$, which is nearly linear.
-Space: $O(N)$ to store the boolean sieve array.
-Status: Stress-tested
 """
 
 

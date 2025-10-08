@@ -1,16 +1,12 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, GeeksForGeeks
-Description: Implements Manacher's algorithm for finding the longest palindromic
+Implements Manacher's algorithm for finding the longest palindromic
 substring in a given string in linear time. Standard naive approaches take
 $O(N^2)$ or $O(N^3)$ time.
-
 The algorithm cleverly handles both odd and even length palindromes by
 transforming the input string. A special character (e.g., '#') is inserted
 between each character and at the ends. For example, "aba" becomes "#a#b#a#"
 and "abba" becomes "#a#b#b#a#". In this new string, every palindrome, regardless
 of its original length, is of odd length and has a distinct center.
-
 The core of the algorithm is to compute an array `p`, where `p[i]` stores the
 radius of the palindrome centered at index `i` in the transformed string.
 It does this efficiently by maintaining the center `c` and right boundary `r`
@@ -19,14 +15,9 @@ it uses the information from the mirror position `i_mirror = 2*c - i` to get an
 initial guess for `p[i]`. It then expands from this guess, avoiding redundant
 character comparisons. This optimization is what brings the complexity down to
 linear time.
-
 After computing the `p` array, the maximum value in `p` corresponds to the
 radius of the longest palindromic substring. From this radius and its center,
 the original substring can be reconstructed.
-
-Time: $O(N)$, where $N$ is the length of the string.
-Space: $O(N)$ to store the transformed string and the palindrome radii array.
-Status: Stress-tested
 """
 
 

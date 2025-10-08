@@ -1,12 +1,8 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, Wikipedia (Hierholzer's algorithm)
-Description: Implements Hierholzer's algorithm to find an Eulerian path or cycle
+Implements Hierholzer's algorithm to find an Eulerian path or cycle
 in a graph. An Eulerian path visits every edge of a graph exactly once. An
 Eulerian cycle is an Eulerian path that starts and ends at the same vertex.
-
 The existence of an Eulerian path/cycle depends on the degrees of the vertices:
-
 For an undirected graph:
 - An Eulerian cycle exists if and only if every vertex has an even degree, and
   all vertices with a non-zero degree belong to a single connected component.
@@ -14,7 +10,6 @@ For an undirected graph:
   degree, and all vertices with a non-zero degree belong to a single component.
   If there are two odd-degree vertices, the path must start at one and end at
   the other.
-
 For a directed graph:
 - An Eulerian cycle exists if and only if for every vertex, the in-degree equals
   the out-degree, and the graph is strongly connected (ignoring isolated vertices).
@@ -22,14 +17,9 @@ For a directed graph:
   `out-degree - in-degree = 1` (the start), at most one vertex has
   `in-degree - out-degree = 1` (the end), every other vertex has equal in- and
   out-degrees, and the underlying undirected graph is connected.
-
 Hierholzer's algorithm finds the path by starting a traversal from a valid
 starting node. It follows edges until it gets stuck, and then backtracks, forming
 the path in reverse. This implementation uses an iterative approach with a stack.
-
-Time: $O(V + E)$, as each edge and vertex is visited a constant number of times.
-Space: $O(V + E)$ to store the graph representation, degree counts, and the path.
-Status: Stress-tested
 """
 
 from collections import Counter

@@ -1,14 +1,10 @@
 """
-Author: PyCPBook Community
-Source: Python official documentation
-Description: This comprehensive guide covers Python lists, one of the most fundamental
+This comprehensive guide covers Python lists, one of the most fundamental
 data structures in competitive programming. Lists are dynamic arrays that can store
 elements of different types and are highly optimized for various operations.
-
 Basic List Operations:
 Lists support numerous operations for manipulation and querying. Understanding the
 time complexity of each operation is crucial for competitive programming efficiency.
-
 - `append(x)`: Adds element x to the end of the list. This is an amortized $O(1)$
   operation, making it the preferred way to build lists incrementally.
 - `pop()` / `pop(i)`: Removes and returns the last element (default) or element at
@@ -21,27 +17,23 @@ time complexity of each operation is crucial for competitive programming efficie
 - `extend(iterable)`: Appends all elements from an iterable. More efficient
   than multiple `append()` calls for adding multiple elements.
 - `clear()`: Removes all elements, equivalent to `del lst[:]`.
-
 Searching and Counting Operations:
 - `index(x)`: Returns the index of the first occurrence of x. Raises ValueError
   if not found. Use `try/except` or check `x in lst` first.
 - `count(x)`: Returns the number of occurrences of x in the list.
 - `x in lst`: Membership test returning True/False. Both `index()` and `count()`
   must scan the list, so they're $O(N)$.
-
 Sorting and Reversing:
 - `sort()`: Sorts the list in-place in $O(N \\log N)$ time. Use `sort(reverse=True)`
   for descending order. For custom sorting, use the `key` parameter.
 - `sorted(lst)`: Returns a new sorted list without modifying the original.
 - `reverse()`: Reverses the list in-place in $O(N)$ time.
 - `lst[::-1]`: Creates a new reversed list using slicing.
-
 List Initialization Patterns:
 - `[]`: Empty list initialization.
 - `[0] * n`: Creates a list of n zeros. Use with immutable types only.
 - `[[0] * m for _ in range(n)]`: Creates a proper 2D list (n×m matrix).
 - `[[0] * m] * n`: WRONG! Creates n references to the same list object.
-
 Common Pitfalls:
 1. Shallow vs Deep Copy: `lst[:]` and `lst.copy()` create shallow copies.
    For nested structures, use `copy.deepcopy()`.
@@ -49,22 +41,16 @@ Common Pitfalls:
    object is reused across function calls. Use `def func(lst=None)` instead.
 3. List Multiplication with Mutable Objects: `[[0] * 3] * 2` creates a list
    where all rows reference the same object.
-
 Performance Tips for Competitive Programming:
 - Pre-allocate lists when size is known: `lst = [0] * n`
 - Use list comprehensions instead of loops for better performance
 - For frequent insertions/deletions at the beginning, use `collections.deque`
 - When building large lists, `append()` is faster than `insert(0, x)`
 - Use `enumerate()` for index-value pairs instead of manual indexing
-
 Memory Considerations:
 - Lists grow dynamically, so memory usage can be higher than expected
 - Use `del lst[i]` or `lst.pop(i)` to free memory when elements are no longer needed
 - For very large datasets, consider using generators or processing in chunks
-
-Time: Varies by operation (documented individually above)
-Space: $O(N)$ where N is the number of elements stored
-Status: Stress-tested
 """
 
 import copy

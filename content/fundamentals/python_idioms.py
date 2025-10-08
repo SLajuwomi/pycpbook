@@ -1,28 +1,22 @@
 """
-Author: PyCPBook Community
-Source: Collective Python programming experience
-Description: This section provides a reference for common and powerful Python
+This section provides a reference for common and powerful Python
 idioms that are particularly useful in competitive programming for writing
 concise, efficient, and readable code.
-
 List, Set, and Dictionary Comprehensions:
 A concise way to create lists, sets, and dictionaries. The syntax is
 `[expression for item in iterable if condition]`. This is often faster and
 more readable than using explicit `for` loops with `.append()`.
-
 Advanced Sorting:
 Python's `sorted()` function and the `.sort()` list method are highly optimized.
 They can be customized using a `key` argument, which is typically a `lambda`
 function. This allows for sorting complex objects based on specific attributes
 or computed values without writing a full comparison function.
-
 String Manipulations:
 - Slicing: Python's slicing `s[start:stop:step]` is a powerful tool for
   substrings and reversing. `s[::-1]` reverses a string in $O(N)$ time.
 - `split()` and `join()`: These methods are the standard way to parse
   space-separated input and format list-based output. `line.split()` handles
   various whitespace, and `' '.join(map(str, my_list))` is a common output pattern.
-
 Character and Number Conversions:
 - `ord(c)`: Returns the ASCII/Unicode integer value of a single character `c`.
   For example, `ord('a')` is 97. This is useful for character arithmetic, like
@@ -31,9 +25,6 @@ Character and Number Conversions:
   value `i`. For example, `chr(97)` is `'a'`.
 - `int(s)` and `str(i)`: Standard functions to convert strings to integers and
   integers to strings, respectively.
-Time: N/A
-Space: N/A
-Status: Not applicable (Informational)
 """
 
 

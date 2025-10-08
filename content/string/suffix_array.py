@@ -1,11 +1,8 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, GeeksForGeeks
-Description: Implements the construction of a Suffix Array and a Longest Common
+Implements the construction of a Suffix Array and a Longest Common
 Prefix (LCP) Array. A suffix array is a sorted array of all suffixes of a given
 string. The LCP array stores the length of the longest common prefix between
 adjacent suffixes in the sorted suffix array.
-
 Suffix Array Construction ($O(N \\log^2 N)$):
 The algorithm works by repeatedly sorting the suffixes based on prefixes of
 increasing lengths that are powers of two.
@@ -17,18 +14,13 @@ increasing lengths that are powers of two.
     characters (starting at `s[i + 2^{k-1}:]`).
 3.  This process continues for $\\log N$ iterations, with each sort taking
     $O(N \\log N)$ time, leading to an overall complexity of $O(N \\log^2 N)$.
-
 LCP Array Construction (Kasai's Algorithm, $O(N)$):
 After the suffix array `sa` is built, the LCP array can be constructed in linear
 time using Kasai's algorithm. The algorithm utilizes the observation that the LCP
 of two suffixes `s[i:]` and `s[j:]` is related to the LCP of `s[i-1:]` and `s[j-1:]`.
 It processes the suffixes in their original order in the string, not the sorted
 order, which allows it to compute the LCP values efficiently.
-
-Time: $O(N \\log^2 N)$ for building the suffix array and $O(N)$ for the LCP array.
 Total time complexity is dominated by the suffix array construction.
-Space: $O(N)$ to store the suffix array, LCP array, and auxiliary arrays for sorting.
-Status: Stress-tested
 """
 
 

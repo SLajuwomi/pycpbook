@@ -1,29 +1,21 @@
 """
-Author: PyCPBook Community
-Source: KACTL, CP-Algorithms (adapted from Treap)
-Description: Implements an Ordered Set data structure using a randomized
+Implements an Ordered Set data structure using a randomized
 balanced binary search tree (Treap). An Ordered Set supports all the standard
 operations of a balanced BST (insert, delete, search) and two additional
 powerful operations:
 1. `find_by_order(k)`: Finds the k-th smallest element in the set (0-indexed).
 2. `order_of_key(key)`: Finds the number of elements in the set that are
    strictly smaller than the given key (i.e., its rank).
-
 To achieve this, each node in the underlying Treap is augmented to store the
 size of the subtree rooted at that node. This `size` information is updated
 during insertions and deletions. The ordered set operations then use these
 sizes to navigate the tree efficiently. For example, to find the k-th element,
 we can compare `k` with the size of the left subtree to decide whether to go
 left, right, or stop at the current node.
-
 The implementation is based on the elegant `split` and `merge` operations,
 which are modified to maintain the subtree size property.
-
-Time: $O(\\log N)$ on average for `insert`, `delete`, `search`,
 `find_by_order`, and `order_of_key` operations, where $N$ is the number of
 elements in the set.
-Space: $O(N)$ to store the nodes of the set.
-Status: Stress-tested
 """
 
 import random

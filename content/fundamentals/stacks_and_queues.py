@@ -1,10 +1,7 @@
 """
-Author: PyCPBook Community
-Source: Python official documentation, standard CS texts
-Description: This guide explains how to implement and use stacks and queues,
+This guide explains how to implement and use stacks and queues,
 two of the most fundamental linear data structures in computer science, using
 Python's built-in features.
-
 Stack (LIFO - Last-In, First-Out):
 A stack is a data structure that follows the LIFO principle. The last element
 added to the stack is the first one to be removed. Think of it like a stack of
@@ -14,7 +11,6 @@ In Python, a standard `list` can be used as a stack.
   amortized $O(1)$ operation.
 - `pop()`: Removes and returns the top element of the stack. This is an $O(1)$
   operation.
-
 Queue (FIFO - First-In, First-Out):
 A queue is a data structure that follows the FIFO principle. The first element
 added to the queue is the first one to be removed, like a checkout line at a
@@ -26,11 +22,7 @@ The correct and efficient way to implement a queue is using `collections.deque`
 - `append()`: Adds an element to the right end (back) of the queue in $O(1)$.
 - `popleft()`: Removes and returns the element from the left end (front) of the
   queue in $O(1)$.
-
 `deque` is highly optimized for appends and pops from both ends.
-Time: All stack and deque operations shown are $O(1)$.
-Space: N/A
-Status: Not applicable (Informational)
 """
 
 from collections import deque

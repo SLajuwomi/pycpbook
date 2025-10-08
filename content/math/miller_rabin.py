@@ -1,11 +1,8 @@
 """
-Author: PyCPBook Community
-Source: Introduction to Algorithms (CLRS), Wikipedia
-Description: Implements the Miller-Rabin primality test, a probabilistic
+Implements the Miller-Rabin primality test, a probabilistic
 algorithm for determining whether a given number is prime. It is highly
 efficient and is the standard method for primality testing in competitive
 programming for numbers that are too large for a sieve.
-
 The algorithm is based on properties of square roots of unity modulo a prime
 number and Fermat's Little Theorem. For a number `n` to be tested, we first
 write `n - 1` as `2^s * d`, where `d` is odd. The test then proceeds:
@@ -15,15 +12,10 @@ write `n - 1` as `2^s * d`, where `d` is odd. The test then proceeds:
 4.  Otherwise, for `s-1` times, compute `x = x^2 mod n`. If `x` becomes `n - 1`,
     the test passes for this base.
 5.  If after these steps, `x` is not `n - 1`, then `n` is definitely composite.
-
 If `n` passes this test for multiple well-chosen bases `a`, it is prime with
 a very high probability. For 64-bit integers, a specific set of deterministic
 witnesses can be used to make the test 100% accurate. This implementation uses
 such a set, making it reliable for contest use.
-
-Time: $O(k \\cdot (\\log n)^2)$, where $k$ is the number of witnesses.
-Space: $O(1)$
-Status: Stress-tested
 """
 
 from content.math.modular_arithmetic import power

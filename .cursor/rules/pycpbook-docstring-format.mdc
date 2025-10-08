@@ -6,16 +6,17 @@ description: PyCPBook mandatory docstring format and documentation standards
 # PyCPBook Documentation Standards
 
 ## Mandatory Docstring Format
-Every `.py` file in `content/` MUST begin with the exact docstring structure:
+Every `.py` file in `content/` MUST begin with a docstring containing only educational content:
 
 ```python
 """
-Author: [Contributor Name]
-Source: [Origin, e.g., KACTL, USACO Guide, Self]
-Description: [Step-by-step explanation of the algorithm. This can be multiple paragraphs long and should be detailed enough for someone to learn the concept from scratch. It should explain the 'why' behind the code.]
-Time: [Asymptotic time complexity, e.g., O(N log N)]
-Space: [Asymptotic space complexity, e.g., O(N)]
-Status: [Stress-tested]
+[Step-by-step explanation of the algorithm. This can be multiple paragraphs long and should be detailed enough for someone to learn the concept from scratch. It should explain the 'why' behind the code. Include time and space complexity information inline where relevant.]
+
+Additional paragraphs can explain:
+- Implementation details and edge cases
+- Trade-offs and alternative approaches
+- Context for when to use each algorithm
+- Common pitfalls and how to avoid them
 """
 ```
 

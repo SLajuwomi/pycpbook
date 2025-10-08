@@ -1,16 +1,11 @@
 """
-Author: PyCPBook Community
-Source: Wikipedia (Shoelace formula), CP-Algorithms
-Description: Implements functions to calculate the area and centroid of a simple
+Implements functions to calculate the area and centroid of a simple
 (non-self-intersecting) polygon. The area is calculated using the Shoelace
 formula, which computes the signed area based on the cross products of adjacent
 vertices. The absolute value of this result gives the geometric area. The centroid
 calculation uses a related formula derived from the shoelace principle. Both
 functions assume the polygon vertices are provided in a consistent order
 (either clockwise or counter-clockwise).
-Time: $O(N)$ for both area and centroid calculation, where $N$ is the number of vertices.
-Space: $O(1)$
-Status: Stress-tested
 """
 
 from content.geometry.point import Point

@@ -1,28 +1,20 @@
 """
-Author: PyCPBook Community
-Source: Introduction to Algorithms (CLRS)
-Description: Implements a standard, unbalanced Binary Search Tree (BST). A BST is
+Implements a standard, unbalanced Binary Search Tree (BST). A BST is
 a rooted binary tree data structure whose internal nodes each store a key greater
 than all keys in the node's left subtree and less than those in its right subtree.
-
 This data structure provides efficient average-case time complexity for search,
 insert, and delete operations. However, its primary drawback is that these
 operations can degrade to $O(N)$ in the worst case if the tree becomes unbalanced
 (e.g., when inserting elements in sorted order, the tree becomes a linked list).
-
 This implementation serves as a foundational example and a good contrast to the
 balanced BSTs (like Treaps) also included in this notebook, which guarantee
 $O(\log N)$ performance.
-
 The `delete` operation handles the three standard cases:
 1. The node to be deleted is a leaf (no children).
 2. The node has one child.
 3. The node has two children (in which case it's replaced by its in-order successor).
-
-Time: Average case for `search`, `insert`, `delete` is $O(\log N)$.
-Worst case is $O(N)$.
-Space: $O(N)$ to store the nodes of the tree.
-Status: Stress-tested
+Average case for `search`, `insert`, `delete` is $O(\log N)$.
+Worst case is $O(N)$. Space complexity is $O(N)$ to store the nodes of the tree.
 """
 
 

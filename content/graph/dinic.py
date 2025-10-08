@@ -1,10 +1,7 @@
 """
-Author: PyCPBook Community
-Source: CP-Algorithms, KACTL
-Description: Implements Dinic's algorithm for computing the maximum flow in a
+Implements Dinic's algorithm for computing the maximum flow in a
 flow network from a source `s` to a sink `t`. Dinic's is one of the most
 efficient algorithms for this problem.
-
 The algorithm operates in phases. In each phase, it does the following:
 1.  Build a "level graph" using a Breadth-First Search (BFS) from the source `s`
     on the residual graph. The level of a vertex is its shortest distance from `s`.
@@ -17,14 +14,9 @@ The algorithm operates in phases. In each phase, it does the following:
     possible along paths from `s` to `t`. Pointers are used to avoid re-exploring
     dead-end paths within the same phase.
 3.  Add the blocking flow found in the phase to the total maximum flow.
-
 The process is repeated until the sink is no longer reachable from the source.
-
-Time: $O(V^2 E)$ in general graphs. It is much faster on certain types of graphs,
 such as $O(E \\sqrt{V})$ for bipartite matching and $O(E \\min(V^{2/3}, E^{1/2}))$
 for unit-capacity networks.
-Space: $O(V + E)$ to store the graph, capacities, and level information.
-Status: Stress-tested
 """
 
 from collections import deque

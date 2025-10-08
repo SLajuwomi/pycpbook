@@ -1,30 +1,20 @@
 """
-Author: PyCPBook Community
-Source: Introduction to Algorithms (CLRS)
-Description: Implements the Floyd-Warshall algorithm for finding all-pairs
+Implements the Floyd-Warshall algorithm for finding all-pairs
 shortest paths in a weighted directed graph. This algorithm can handle graphs
 with negative edge weights.
-
 The algorithm is based on a dynamic programming approach. It iteratively considers
 each vertex `k` and updates the shortest path between all pairs of vertices `(i, j)`
 to see if a path through `k` is shorter. The core recurrence is:
 `dist(i, j) = min(dist(i, j), dist(i, k) + dist(k, j))`
-
 After running the algorithm with all vertices `k` from 0 to `V-1`, the resulting
 distance matrix contains the shortest paths between all pairs of vertices.
-
 A key feature of Floyd-Warshall is its ability to detect negative-weight cycles.
 If, after the algorithm completes, the distance from any vertex `i` to itself
 (`dist[i][i]`) is negative, it indicates that there is a negative-weight cycle
 reachable from `i`.
-
 This implementation takes an edge list as input, builds an adjacency matrix,
 runs the algorithm, and then checks for negative cycles.
-
-Time: $O(V^3)$, where $V$ is the number of vertices. The three nested loops
 dominate the runtime.
-Space: $O(V^2)$ to store the distance matrix.
-Status: Stress-tested
 """
 
 
