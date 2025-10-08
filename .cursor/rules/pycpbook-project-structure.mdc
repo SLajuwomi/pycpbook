@@ -1,0 +1,42 @@
+---
+alwaysApply: true
+description: PyCPBook project structure and organization guidelines
+---
+
+# PyCPBook Project Structure & Organization
+
+## Directory Structure Compliance
+- All new content must follow the existing directory structure: `content/{chapter}/` and `stress_tests/{chapter}/`
+- File names must use `snake_case.py` format
+- Each content file must have a corresponding stress test file in the parallel directory structure
+- Never create files outside the established directory structure
+
+## Chapter Organization
+New algorithms/data structures must be placed in the appropriate existing chapter:
+- `content/contest/` - Contest setup, templates, debugging tricks
+- `content/data_structures/` - All data structure implementations  
+- `content/graph/` - Graph algorithms and related problems
+- `content/string/` - String processing algorithms
+- `content/math/` - Mathematical algorithms and number theory
+- `content/geometry/` - Geometric algorithms and primitives
+- `content/dp/` - Dynamic programming patterns and optimizations
+- `content/fundamentals/` - Core algorithmic techniques and Python patterns
+- `content/standard_library/` - Python standard library usage guides
+
+## Build System Integration
+- All new content must be compatible with the existing [build.py](mdc:build.py) script
+- Files must be parseable by the `ast` module for docstring extraction
+- Generated LaTeX files must compile without errors
+- No modifications to build system without explicit approval
+
+## File Naming Conventions
+- Content files: `{algorithm_name}.py`
+- Generated files: `_generated_{algorithm_name}.tex` (auto-generated)
+- Test files: `{algorithm_name}.py` (in stress_tests directory)
+- Chapter files: `chapter.tex` (one per directory)
+
+## Development Workflow
+- Each new feature requires: code snippet + docstring + stress test
+- All three components must be complete before considering feature done
+- Test files must pass before committing
+- Follow the existing CI/CD workflow defined in [.github/workflows/ci.yml](mdc:.github/workflows/ci.yml)

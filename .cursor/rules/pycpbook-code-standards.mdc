@@ -1,0 +1,45 @@
+---
+globs: *.py
+description: PyCPBook Python code quality and style standards
+---
+
+# PyCPBook Code Quality Standards
+
+## Python Code Requirements
+- All code must be Python 3.8+ compatible
+- No type hints allowed in code snippets
+- Balance PEP 8 with competitive programming brevity
+- Use `snake_case` for all file and function names
+- Variable names can be concise for competitive programming (e.g., `adj` for adjacency list)
+- **NO INLINE COMMENTS IN THE CODE** - explanations belong in docstrings only
+
+## Performance Standards
+- Prioritize best asymptotic time complexity implementations
+- Be mindful of constant factors and avoid slow Python features
+- Ensure memory-efficient solutions
+- Code should be concise and easy to type under time pressure
+- Avoid unnecessary object creation in tight loops
+
+## Code Completeness
+- Every implementation must be copy-pasteable into a contest environment
+- Include all necessary imports at the top of files
+- Handle edge cases appropriately
+- No placeholder comments or incomplete implementations
+
+## Algorithm Implementation
+- All fundamental algorithms must be included for self-contained notebook
+- Implementations must be contest-ready without modification
+- Include proper error handling for edge cases
+- Use optimal algorithms with best known time/space complexity
+
+## Consistency Standards
+- Follow existing code patterns and style
+- Use consistent variable naming conventions
+- Maintain similar function signatures across related algorithms
+- Follow the same error handling patterns
+
+## Code Review Standards
+- Double-check correctness, edge cases, and clarity
+- Verify stress tests cover comprehensive scenarios
+- Ensure docstrings are educational and complete
+- Confirm build system compatibility

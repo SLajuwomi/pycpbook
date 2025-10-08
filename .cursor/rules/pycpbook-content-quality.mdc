@@ -1,0 +1,42 @@
+---
+description: PyCPBook content quality standards and educational requirements
+---
+
+# PyCPBook Content Quality Standards
+
+## Educational Value Requirements
+- Code should serve as both reference and learning resource
+- Include comprehensive explanations in docstrings
+- Provide context for when to use each algorithm
+- Explain trade-offs and alternative approaches where relevant
+- Assume user is intelligent but unfamiliar with the specific topic
+
+## Algorithm Implementation Standards
+- All fundamental algorithms must be included for self-contained notebook
+- Implementations must be contest-ready without modification
+- Include proper error handling for edge cases
+- Use optimal algorithms with best known time/space complexity
+- Prioritize best asymptotic time complexity implementations
+
+## Contest Readiness
+- Every implementation must be copy-pasteable into a contest environment
+- Code should be concise and easy to type under time pressure
+- Handle edge cases appropriately
+- No placeholder comments or incomplete implementations
+- Include all necessary imports at the top of files
+
+## Comprehensive Coverage
+- Cover standard competitive programming topics in structured manner
+- Include both fundamental and advanced algorithms
+- Provide multiple approaches where applicable (e.g., different MST algorithms)
+- Ensure notebook is self-contained for contest use
+
+## Quality Assurance
+- Double-check correctness, edge cases, and clarity before finalization
+- Verify stress tests cover comprehensive scenarios
+- Ensure docstrings are educational and complete
+- Confirm build system compatibility
+- Test PDF generation works without errors
+
+## Reference Implementation
+See existing implementations like [content/data_structures/union_find.py](mdc:content/data_structures/union_find.py) for quality standards.

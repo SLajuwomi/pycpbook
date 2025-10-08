@@ -6,3 +6,5 @@
 - add set union, intersection, difference, symmetric difference, etc.
 - add optimization, napsack, stack, queue, backtracking, etc.
 - add page numbers
+- dictionary of lists
+- looping over multiple inputs in bash command line for test cases

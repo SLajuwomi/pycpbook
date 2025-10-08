@@ -1,0 +1,39 @@
+---
+globs: content/**/*.py
+description: PyCPBook mandatory docstring format and documentation standards
+---
+
+# PyCPBook Documentation Standards
+
+## Mandatory Docstring Format
+Every `.py` file in `content/` MUST begin with the exact docstring structure:
+
+```python
+"""
+Author: [Contributor Name]
+Source: [Origin, e.g., KACTL, USACO Guide, Self]
+Description: [Step-by-step explanation of the algorithm. This can be multiple paragraphs long and should be detailed enough for someone to learn the concept from scratch. It should explain the 'why' behind the code.]
+Time: [Asymptotic time complexity, e.g., O(N log N)]
+Space: [Asymptotic space complexity, e.g., O(N)]
+Status: [Stress-tested]
+"""
+```
+
+## LaTeX Math Formatting
+- Use `$...$` delimiters for math expressions
+- Escape backslashes: `$O(\\\\log N)$` not `$O(\\log N)$`
+- Use backticks for inline code: `` `solve()` `` function uses `` `sys.stdin.readline()` ``
+- For literal backslashes in code, use double backslash: `` `\\\\n` ``
+
+## Description Quality Requirements
+- Explanations must be comprehensive and clear
+- Break down algorithms step-by-step
+- Assume user is intelligent but unfamiliar with the specific topic
+- Include the "why" behind algorithmic choices
+- Cover edge cases and implementation details
+- Educational value: Code should serve as both reference and learning resource
+- Provide context for when to use each algorithm
+- Explain trade-offs and alternative approaches where relevant
+
+## Example Reference
+See [content/fundamentals/python_idioms.py](mdc:content/fundamentals/python_idioms.py) for proper docstring format.

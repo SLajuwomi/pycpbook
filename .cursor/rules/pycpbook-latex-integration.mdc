@@ -1,0 +1,39 @@
+---
+globs: content/**/*.tex,doc/**/*.tex
+description: PyCPBook LaTeX integration and PDF generation requirements
+---
+
+# PyCPBook LaTeX Integration
+
+## Build System Integration
+- All content must be compatible with the existing [build.py](mdc:build.py) script
+- Files must be parseable by the `ast` module for docstring extraction
+- Generated LaTeX files must compile without errors
+- No modifications to build system without explicit approval
+
+## LaTeX File Structure
+- Main document: [content/pycpbook.tex](mdc:content/pycpbook.tex)
+- Chapter files: [content/{chapter}/chapter.tex](mdc:content/{chapter}/chapter.tex)
+- Style files: [doc/tex/pycpbook.sty](mdc:doc/tex/pycpbook.sty) and [doc/tex/preamble.tex](mdc:doc/tex/preamble.tex)
+
+## Generated File Management
+- Build script generates `_generated_{filename}.tex` files automatically
+- Chapter files should include generated content via `\input{_generated_*.tex}`
+- Generated files are temporary and cleaned up by `python build.py clean`
+
+## PDF Generation Requirements
+- All new content must compile to PDF without LaTeX errors
+- Maintain consistent formatting and layout
+- Ensure table of contents updates correctly
+- Preserve syntax highlighting for code blocks
+
+## Integration Requirements
+- New content must integrate seamlessly with existing chapters
+- Update chapter.tex files to include new content
+- Ensure PDF generation works without errors
+- Maintain consistent formatting and layout
+
+## Build Commands
+- `python build.py pdf` - Generate PDF from all content
+- `python build.py test` - Run all stress tests
+- `python build.py clean` - Remove temporary files and PDF

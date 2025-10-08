@@ -1,0 +1,60 @@
+---
+globs: stress_tests/**/*.py
+description: PyCPBook stress testing framework requirements and standards
+---
+
+# PyCPBook Stress Testing Framework
+
+## Mandatory Requirements
+- Every algorithm/data structure MUST have a corresponding stress test
+- Test files must be self-contained and executable
+- Include random data generation with edge cases (empty inputs, small N, large N, boundary values)
+- Implement naive/brute-force solution for comparison
+- Run thousands of random test cases with assertion-based validation
+- Print "Passed!" message on success, detailed failure info on error
+
+## Test File Structure
+```python
+import random
+import sys
+import os
+
+# Add content directory to path to import the solution
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../content/{chapter}'))
+from {algorithm} import {ClassOrFunction}
+
+def solve_naive(...):
+    """Implement naive/brute-force solution for comparison"""
+    pass
+
+def generate_random_case():
+    """Generate valid, randomized inputs including edge cases"""
+    pass
+
+def run_test():
+    """Main test execution with loop"""
+    for i in range(ITERATIONS):
+        case = generate_random_case()
+        result_optimized = optimized_solution(case)
+        result_naive = solve_naive(case)
+        assert result_optimized == result_naive, f"Test failed: {case}"
+
+if __name__ == "__main__":
+    run_test()
+```
+
+## Test Requirements
+- Import optimized solution from content directory
+- Define `generate_random_case()` function
+- Define `solve_naive()` function for comparison  
+- Main execution block with loop (typically 1000+ iterations)
+- Assert identical results between optimized and naive solutions
+- Handle test failures with informative error messages
+
+## Example Reference
+See [stress_tests/fundamentals/python_idioms.py](mdc:stress_tests/fundamentals/python_idioms.py) for proper test structure.
+
+## Integration with Build System
+- Tests must be compatible with `python build.py test` command
+- All tests must pass before content is considered complete
+- Tests run automatically in CI/CD pipeline via [.github/workflows/ci.yml](mdc:.github/workflows/ci.yml)
