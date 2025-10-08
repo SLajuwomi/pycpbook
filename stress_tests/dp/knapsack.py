@@ -39,26 +39,34 @@ def brute_unbounded(weights, values, C):
 
 
 def brute_bounded(weights, values, counts, C):
-    items = []
+    dp = [0] * (C + 1)
     for w, v, m in zip(weights, values, counts):
-        items.extend([(w, v)] * m)
-    if not items:
-        return 0
-    W = [w for w, _ in items]
-    V = [v for _, v in items]
-    return brute_knapsack_01(W, V, C)
+        for c in range(C, -1, -1):
+            best = dp[c]
+            k = 1
+            # try k copies up to m, bounded by capacity
+            for t in range(1, m + 1):
+                cost = t * w
+                if cost > c:
+                    break
+                val = dp[c - cost] + t * v
+                if val > best:
+                    best = val
+            dp[c] = best
+    return dp[C]
 
 
 def verify_subset_sum(nums, S):
-    n = len(nums)
-    possible = set([0])
+    if S < 0:
+        return False
+    dp = [False] * (S + 1)
+    dp[0] = True
     for x in nums:
-        newp = set()
-        for s in possible:
-            ns = s + x
-            newp.add(ns)
-        possible |= newp
-    return (S in possible)
+        if x <= S and x >= 0:
+            for s in range(S, x - 1, -1):
+                if dp[s - x]:
+                    dp[s] = True
+    return dp[S]
 
 
 def run_random_tests():

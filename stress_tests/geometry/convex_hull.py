@@ -51,10 +51,16 @@ def naive_convex_hull(points):
         hull.append(points[p_idx])
         q_idx = (p_idx + 1) % n
         for i in range(n):
-            # Find the most counter-clockwise point
             orient = orientation(points[p_idx], points[i], points[q_idx])
-            if orient == -1:  # points[i] is more counter-clockwise
+            if orient == -1:
                 q_idx = i
+            elif orient == 0:
+                dx_i = points[i].x - points[p_idx].x
+                dy_i = points[i].y - points[p_idx].y
+                dx_q = points[q_idx].x - points[p_idx].x
+                dy_q = points[q_idx].y - points[p_idx].y
+                if dx_i * dx_i + dy_i * dy_i > dx_q * dx_q + dy_q * dy_q:
+                    q_idx = i
         p_idx = q_idx
         if p_idx == start_idx:
             break

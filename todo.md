@@ -6,6 +6,6 @@
 - [X] 6. add set union, intersection, difference, symmetric difference, etc.
 - [X] 7. add optimization, napsack, stack, queue, backtracking, etc.
 - [X] 8. add page numbers
-- [ ] 9. dictionary of lists
-- [ ] 10. looping over multiple inputs in bash command line for test cases
+- [X] 9. dictionary of lists
+- [X] 10. looping over multiple inputs in bash command line for test cases
 - [X] 11. remove header information from docstrings as it is just adding noise
