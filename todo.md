@@ -1,10 +1,10 @@
-- [X] add page numbers
-- [X] add list operator stuff, like pop(), append(), etc.
-- [ ] add is stuff, like is_prime(), is_palindrome(), isalpha(), isdigit(), etc.
-- [ ] add bitwise stuff, like &, |, ^, ~, <<, >>
-- [ ] add linked list implementation and operations
-- [ ] add set union, intersection, difference, symmetric difference, etc.
-- [ ] add optimization, napsack, stack, queue, backtracking, etc.
-- [ ] add page numbers
-- [ ] dictionary of lists
-- [ ] looping over multiple inputs in bash command line for test cases
+- [X] 1. add page numbers
+- [X] 2. add list operator stuff, like pop(), append(), etc.
+- [X] 3. add is stuff, like is_prime(), is_palindrome(), isalpha(), isdigit(), etc.
+- [ ] 4. add bitwise stuff, like &, |, ^, ~, <<, >>
+- [ ] 5. add linked list implementation and operations
+- [ ] 6. add set union, intersection, difference, symmetric difference, etc.
+- [ ] 7. add optimization, napsack, stack, queue, backtracking, etc.
+- [ ] 8. add page numbers
+- [ ] 9. dictionary of lists
+- [ ] 10. looping over multiple inputs in bash command line for test cases

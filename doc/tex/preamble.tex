@@ -22,6 +22,14 @@
 % This requires the --shell-escape flag for pdflatex.
 \usepackage{minted}
 
+% Map problematic Unicode for pdflatex so minted code blocks compile
+% U+216B ROMAN NUMERAL TWELVE → "XII"
+% U+0662 ARABIC-INDIC DIGIT TWO → "2"
+% U+03C0 GREEK SMALL LETTER PI → math \pi
+\DeclareUnicodeCharacter{216B}{XII}
+\DeclareUnicodeCharacter{0662}{2}
+\DeclareUnicodeCharacter{03C0}{$\pi$}
+
 % --- Hyperref Configuration ---
 \hypersetup{
     colorlinks=true,
