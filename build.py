@@ -370,39 +370,40 @@ def run_pdf():
 
     for i in range(2):
         print(f"--- Pass {i + 1} ---")
-        try:
-            result = subprocess.run(
-                pdflatex_command,
-                cwd=content_dir,
-                capture_output=True,
-                text=True,
-                check=True,
-                encoding="utf-8",
-            )
-            if "error" in result.stdout.lower():
-                print(f"LaTeX compilation might have issues. Check {main_tex_file}.log")
-
-        except (subprocess.CalledProcessError, FileNotFoundError) as e:
-            print("\n--- LaTeX Compilation Failed ---", file=sys.stderr)
-            log_file = os.path.join(content_dir, "pycpbook.log")
-            print(
-                f"Error during PDF compilation. See '{log_file}' for details.",
-                file=sys.stderr,
-            )
-            if os.path.exists(log_file):
-                with open(log_file, "r", encoding="utf-8") as f:
-                    log_lines = f.readlines()
-                    print("\n--- Last 20 lines of log file ---\n", file=sys.stderr)
-                    sys.stderr.writelines(log_lines[-20:])
-            sys.exit(1)
+        result = subprocess.run(
+            pdflatex_command,
+            cwd=content_dir,
+            capture_output=True,
+            text=True,
+            check=False,
+            encoding="utf-8",
+        )
+        if result.returncode != 0:
+            print("Warning: pdflatex returned a non-zero exit code. Checking output/logs...")
+        elif "error" in (result.stdout or "").lower():
+            print(f"LaTeX reported errors in output. Check {main_tex_file}.log")
 
     final_pdf_path_src = os.path.join(content_dir, "pycpbook.pdf")
     final_pdf_path_dest = os.path.join(root_dir, "pycpbook.pdf")
     if os.path.exists(final_pdf_path_src):
-        shutil.move(final_pdf_path_src, final_pdf_path_dest)
-        print(f"\nPDF generated successfully: {final_pdf_path_dest}")
+        try:
+            shutil.copyfile(final_pdf_path_src, final_pdf_path_dest)
+            print(f"\nPDF generated successfully: {final_pdf_path_dest}")
+        except OSError as e:
+            print(f"Warning: Could not copy PDF to project root: {e}", file=sys.stderr)
+        print(f"PDF also available at: {final_pdf_path_src}")
     else:
-        print("Error: Final PDF was not found after compilation.", file=sys.stderr)
+        print("\n--- LaTeX Compilation Failed ---", file=sys.stderr)
+        log_file = os.path.join(content_dir, "pycpbook.log")
+        print(
+            f"Error: Final PDF was not found after compilation. See '{log_file}' for details.",
+            file=sys.stderr,
+        )
+        if os.path.exists(log_file):
+            with open(log_file, "r", encoding="utf-8") as f:
+                log_lines = f.readlines()
+                print("\n--- Last 20 lines of log file ---\n", file=sys.stderr)
+                sys.stderr.writelines(log_lines[-20:])
         sys.exit(1)
 
 
