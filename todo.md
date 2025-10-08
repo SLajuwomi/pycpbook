@@ -3,8 +3,8 @@
 - [X] 3. add is stuff, like is_prime(), is_palindrome(), isalpha(), isdigit(), etc.
 - [X] 4. add bitwise stuff, like &, |, ^, ~, <<, >>, etc.
 - [X] 5. add linked list implementation and operations
-- [ ] 6. add set union, intersection, difference, symmetric difference, etc.
-- [ ] 7. add optimization, napsack, stack, queue, backtracking, etc.
+- [X] 6. add set union, intersection, difference, symmetric difference, etc.
+- [X] 7. add optimization, napsack, stack, queue, backtracking, etc.
 - [X] 8. add page numbers
 - [ ] 9. dictionary of lists
 - [ ] 10. looping over multiple inputs in bash command line for test cases
