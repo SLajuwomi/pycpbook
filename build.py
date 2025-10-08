@@ -94,6 +94,7 @@ def _process_latex_part(text_part):
 def _escape_latex(text):
     """
     Escapes a full docstring for LaTeX, handling paragraphs, lists, math, and code.
+    Now processes mixed content blocks line-by-line to properly format lists.
     """
     if text is None:
         return ""
@@ -107,34 +108,85 @@ def _escape_latex(text):
     output_blocks = []
 
     for block in blocks:
-        lines = [line.strip() for line in block.split("\n") if line.strip()]
+        lines = [line for line in block.split("\n") if line.strip()]
         if not lines:
             continue
 
-        # Check if all lines in the block form a list
-        is_bullet_list = all(bullet_pattern.match(line) for line in lines)
-        is_enum_list = all(enum_pattern.match(line) for line in lines)
+        # Process the block line-by-line to handle mixed content
+        block_output = []
+        current_list_type = None
+        current_list_items = []
+        current_paragraph_lines = []
 
-        if is_bullet_list:
-            list_items = ["\\begin{itemize}"]
-            for line in lines:
-                match = bullet_pattern.match(line)
-                if match:
-                    list_items.append(f"  \\item {_process_latex_part(match.group(1))}")
-            list_items.append("\\end{itemize}")
-            output_blocks.append("\n".join(list_items))
-        elif is_enum_list:
-            list_items = ["\\begin{enumerate}"]
-            for line in lines:
-                match = enum_pattern.match(line)
-                if match:
-                    list_items.append(f"  \\item {_process_latex_part(match.group(1))}")
-            list_items.append("\\end{enumerate}")
-            output_blocks.append("\n".join(list_items))
-        else:
-            # It's a paragraph
-            paragraph = " ".join(lines)
-            output_blocks.append(_process_latex_part(paragraph))
+        def flush_paragraph():
+            """Flush accumulated paragraph lines."""
+            nonlocal current_paragraph_lines
+            if current_paragraph_lines:
+                paragraph = " ".join(current_paragraph_lines)
+                block_output.append(_process_latex_part(paragraph))
+                current_paragraph_lines = []
+
+        def flush_list():
+            """Flush accumulated list items."""
+            nonlocal current_list_type, current_list_items
+            if current_list_items:
+                if current_list_type == "bullet":
+                    block_output.append("\\begin{itemize}")
+                    block_output.extend(current_list_items)
+                    block_output.append("\\end{itemize}")
+                elif current_list_type == "enum":
+                    block_output.append("\\begin{enumerate}")
+                    block_output.extend(current_list_items)
+                    block_output.append("\\end{enumerate}")
+                current_list_items = []
+                current_list_type = None
+
+        for line in lines:
+            line_stripped = line.strip()
+            bullet_match = bullet_pattern.match(line_stripped)
+            enum_match = enum_pattern.match(line_stripped)
+            
+            # Check if this is a continuation line (indented but not a new list item)
+            is_continuation = (current_list_type is not None and 
+                             line.startswith(('  ', '\t')) and 
+                             not bullet_match and 
+                             not enum_match)
+            
+            if bullet_match:
+                # We have a bullet list item
+                if current_list_type != "bullet":
+                    flush_paragraph()  # Flush any pending paragraph
+                    flush_list()  # Flush any existing list
+                    current_list_type = "bullet"
+                current_list_items.append(f"  \\item {_process_latex_part(bullet_match.group(1))}")
+                
+            elif enum_match:
+                # We have a numbered list item
+                if current_list_type != "enum":
+                    flush_paragraph()  # Flush any pending paragraph
+                    flush_list()  # Flush any existing list
+                    current_list_type = "enum"
+                current_list_items.append(f"  \\item {_process_latex_part(enum_match.group(1))}")
+                
+            elif is_continuation:
+                # This is a continuation of the current list item
+                if current_list_items:
+                    # Append to the last list item
+                    current_list_items[-1] += " " + _process_latex_part(line_stripped)
+                
+            else:
+                # We have regular text
+                if current_list_type is not None:
+                    flush_list()  # Flush any existing list
+                current_paragraph_lines.append(line_stripped)
+
+        # Flush any remaining content
+        flush_list()
+        flush_paragraph()
+
+        # Join all output from this block
+        if block_output:
+            output_blocks.append("\n".join(block_output))
 
     return "\n\\par\n".join(output_blocks)
 
