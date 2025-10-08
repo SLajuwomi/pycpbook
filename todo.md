@@ -2,7 +2,7 @@
 - [X] 2. add list operator stuff, like pop(), append(), etc.
 - [X] 3. add is stuff, like is_prime(), is_palindrome(), isalpha(), isdigit(), etc.
 - [X] 4. add bitwise stuff, like &, |, ^, ~, <<, >>, etc.
-- [ ] 5. add linked list implementation and operations
+- [X] 5. add linked list implementation and operations
 - [ ] 6. add set union, intersection, difference, symmetric difference, etc.
 - [ ] 7. add optimization, napsack, stack, queue, backtracking, etc.
 - [X] 8. add page numbers
